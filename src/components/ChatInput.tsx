@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronUp } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -48,7 +48,7 @@ export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
             className="absolute right-2 bottom-2 h-8 w-8 rounded-full bg-primary hover:bg-primary/90"
             disabled={disabled}
           >
-            <ChevronUp className="h-4 w-4" />
+            <ArrowUp className="h-4 w-4" />
           </Button>
         )}
       </form>
