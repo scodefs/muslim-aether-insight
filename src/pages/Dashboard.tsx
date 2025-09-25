@@ -115,17 +115,23 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle>Transcribed Hours per Month</CardTitle>
           </CardHeader>
-          <CardContent className="overflow-hidden">
+          <CardContent className="overflow-hidden p-4">
             <ChartContainer config={chartConfig} className="h-[250px] sm:h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthlyData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+                <LineChart data={monthlyData} margin={{ top: 10, right: 30, left: 20, bottom: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month" 
                     tick={{ fontSize: 12 }}
                     interval={0}
+                    axisLine={false}
+                    tickLine={false}
                   />
-                  <YAxis tick={{ fontSize: 12 }} />
+                  <YAxis 
+                    tick={{ fontSize: 12 }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Line 
                     type="monotone" 
@@ -144,17 +150,23 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle>Transcribed Hours by Tag</CardTitle>
           </CardHeader>
-          <CardContent className="overflow-hidden">
+          <CardContent className="overflow-hidden p-4">
             <ChartContainer config={chartConfig} className="h-[250px] sm:h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={tagData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+                <BarChart data={tagData} margin={{ top: 10, right: 30, left: 20, bottom: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="tag" 
                     tick={{ fontSize: 12 }}
                     interval={0}
+                    axisLine={false}
+                    tickLine={false}
                   />
-                  <YAxis tick={{ fontSize: 12 }} />
+                  <YAxis 
+                    tick={{ fontSize: 12 }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar 
                     dataKey="hours" 
