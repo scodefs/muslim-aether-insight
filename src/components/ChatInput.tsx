@@ -45,7 +45,7 @@ export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
           <Button 
             type="submit" 
             size="icon" 
-            className="absolute right-2 bottom-2 h-8 w-8 rounded-lg bg-primary hover:bg-primary/90"
+            className="absolute right-2 bottom-2 h-8 w-8 rounded-full bg-primary hover:bg-primary/90"
             disabled={disabled}
           >
             <ChevronUp className="h-4 w-4" />
