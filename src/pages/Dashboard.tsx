@@ -111,17 +111,21 @@ export default function Dashboard() {
 
       {/* Charts */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <Card className="animate-fade-in">
+        <Card className="animate-fade-in overflow-hidden">
           <CardHeader>
             <CardTitle>Transcribed Hours per Month</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[300px]">
+          <CardContent className="overflow-hidden">
+            <ChartContainer config={chartConfig} className="h-[250px] sm:h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthlyData}>
+                <LineChart data={monthlyData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
+                  <XAxis 
+                    dataKey="month" 
+                    tick={{ fontSize: 12 }}
+                    interval={0}
+                  />
+                  <YAxis tick={{ fontSize: 12 }} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Line 
                     type="monotone" 
@@ -136,17 +140,21 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="animate-fade-in">
+        <Card className="animate-fade-in overflow-hidden">
           <CardHeader>
             <CardTitle>Transcribed Hours by Tag</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[300px]">
+          <CardContent className="overflow-hidden">
+            <ChartContainer config={chartConfig} className="h-[250px] sm:h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={tagData}>
+                <BarChart data={tagData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="tag" />
-                  <YAxis />
+                  <XAxis 
+                    dataKey="tag" 
+                    tick={{ fontSize: 12 }}
+                    interval={0}
+                  />
+                  <YAxis tick={{ fontSize: 12 }} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar 
                     dataKey="hours" 
