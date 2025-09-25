@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Send } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -29,26 +29,28 @@ export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
 
   return (
     <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4">
-      <form onSubmit={handleSubmit} className="flex gap-2">
+      <form onSubmit={handleSubmit} className="relative max-w-4xl mx-auto">
         <Textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Ask your Muslim AI assistant..."
           className={cn(
-            "min-h-[60px] resize-none rounded-lg border-input",
+            "min-h-[60px] resize-none rounded-lg border-input pr-12",
             "focus:ring-2 focus:ring-primary focus:border-transparent"
           )}
           disabled={disabled}
         />
-        <Button 
-          type="submit" 
-          size="icon" 
-          className="h-[60px] w-[60px] rounded-lg"
-          disabled={!message.trim() || disabled}
-        >
-          <Send className="h-4 w-4" />
-        </Button>
+        {message.trim() && (
+          <Button 
+            type="submit" 
+            size="icon" 
+            className="absolute right-2 bottom-2 h-8 w-8 rounded-lg bg-primary hover:bg-primary/90"
+            disabled={disabled}
+          >
+            <ChevronUp className="h-4 w-4" />
+          </Button>
+        )}
       </form>
     </div>
   );
