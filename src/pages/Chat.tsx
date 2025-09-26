@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { ChatMessage } from "@/components/ChatMessage";
 import { ChatInput } from "@/components/ChatInput";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useWebhookData } from "@/hooks/useWebhookData";
 
 interface Message {
   id: string;
@@ -30,6 +31,7 @@ export default function Chat() {
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const webhookData = useWebhookData();
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
@@ -43,6 +45,26 @@ export default function Chat() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Handle webhook data and add as AI responses
+  useEffect(() => {
+    if (webhookData.length > 0) {
+      const latestWebhookData = webhookData[webhookData.length - 1];
+      const webhookMessage: Message = {
+        id: `webhook-${latestWebhookData.id}`,
+        content: `📡 Webhook Data Received:\n\n${JSON.stringify(latestWebhookData.data, null, 2)}`,
+        sender: "ai",
+        timestamp: latestWebhookData.timestamp,
+      };
+      
+      setMessages(prev => {
+        // Check if this webhook message already exists
+        const exists = prev.some(msg => msg.id === webhookMessage.id);
+        if (exists) return prev;
+        return [...prev, webhookMessage];
+      });
+    }
+  }, [webhookData]);
 
   const handleSendMessage = async (content: string) => {
     const userMessage: Message = {
