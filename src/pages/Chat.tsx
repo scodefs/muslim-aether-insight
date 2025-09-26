@@ -11,14 +11,8 @@ interface Message {
   timestamp: Date;
 }
 
-// Dummy AI responses about Islamic topics
-const aiResponses = [
-  "As-salamu alaykum! I'm here to help you with questions about Islam, Quran, Hadith, and Islamic knowledge. How can I assist you today?",
-  "Based on Islamic teachings, the five pillars of Islam are: Shahada (declaration of faith), Salah (prayer), Zakat (charity), Sawm (fasting), and Hajj (pilgrimage).",
-  "The Quran teaches us about compassion, justice, and the importance of seeking knowledge. 'And whoever saves a life, it is as if he has saved all of mankind.' (Quran 5:32)",
-  "Islamic ethics emphasize honesty, kindness, and treating others with respect. The Prophet (peace be upon him) said: 'The best of people are those who benefit others.'",
-  "In Islamic tradition, seeking knowledge is a lifelong journey. The Prophet (peace be upon him) said: 'Seek knowledge from the cradle to the grave.'",
-];
+// Webhook URL for sending messages
+const WEBHOOK_URL = "https://sudeis21.app.n8n.cloud/webhook-test/a04da8b6-6276-4919-93ed-366962ffcb97";
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([
@@ -77,17 +71,48 @@ export default function Chat() {
     setMessages(prev => [...prev, userMessage]);
     setIsTyping(true);
 
-    // Simulate AI response delay
-    setTimeout(() => {
-      const aiMessage: Message = {
+    try {
+      // Send message to webhook
+      const response = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: content,
+          timestamp: new Date().toISOString(),
+          user_id: "user_" + Date.now()
+        }),
+      });
+
+      if (response.ok) {
+        const responseData = await response.text();
+        
+        const aiMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          content: responseData || "Message received and processed.",
+          sender: "ai",
+          timestamp: new Date(),
+        };
+        
+        setMessages(prev => [...prev, aiMessage]);
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error sending message to webhook:', error);
+      
+      const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: aiResponses[Math.floor(Math.random() * aiResponses.length)],
+        content: "Sorry, I'm having trouble connecting to the server. Please try again.",
         sender: "ai",
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, aiMessage]);
+      
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   return (
