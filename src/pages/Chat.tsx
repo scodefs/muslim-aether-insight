@@ -86,11 +86,11 @@ export default function Chat() {
       });
 
       if (response.ok) {
-        const responseData = await response.text();
+        const responseData = await response.json();
         
         const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
-          content: responseData || "Message received and processed.",
+          content: responseData.output || responseData.message || "Message received and processed.",
           sender: "ai",
           timestamp: new Date(),
         };
