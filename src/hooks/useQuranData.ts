@@ -57,7 +57,7 @@ export function useSurahs() {
   return { surahs, loading, error };
 }
 
-export function useSurahWithAyahs(surahId: number | null, languageCode: string = 'en', translatorName: string = 'Sahih International') {
+export function useSurahWithAyahs(surahId: number | null, languageCode: string = 'en', translatorName: string = 'Hilali & Khan') {
   const [ayahs, setAyahs] = useState<AyahWithTranslation[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

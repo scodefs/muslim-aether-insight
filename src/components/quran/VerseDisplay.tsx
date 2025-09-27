@@ -11,7 +11,7 @@ interface VerseDisplayProps {
   translatorName?: string;
 }
 
-export function VerseDisplay({ surahId, selectedVerse, translatorName = "Sahih International" }: VerseDisplayProps) {
+export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali & Khan" }: VerseDisplayProps) {
   const { surahs } = useSurahs();
   const { ayahs, loading, error } = useSurahWithAyahs(surahId, 'en', translatorName);
   

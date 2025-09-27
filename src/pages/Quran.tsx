@@ -9,7 +9,7 @@ import { useSurahs } from "@/hooks/useQuranData";
 export default function Quran() {
   const [selectedSurahId, setSelectedSurahId] = useState<number | null>(1); // Default to Al-Fatihah
   const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
-  const [selectedTranslator, setSelectedTranslator] = useState<string>("Sahih International");
+  const [selectedTranslator, setSelectedTranslator] = useState<string>("Hilali & Khan");
   const { surahs, loading } = useSurahs();
 
   const handleSurahChange = (surahId: number) => {
