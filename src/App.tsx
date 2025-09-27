@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import Chat from "./pages/Chat";
-import DailyGuidance from "./pages/DailyGuidance";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
@@ -28,7 +27,6 @@ const App = () => (
               <main className="flex-1 overflow-hidden">
                 <Routes>
                   <Route path="/" element={<Chat />} />
-                  <Route path="/daily-guidance" element={<DailyGuidance />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
