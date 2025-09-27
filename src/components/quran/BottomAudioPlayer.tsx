@@ -218,6 +218,18 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
               />
               <span className="text-xs text-muted-foreground min-w-fit">{formatTime(duration)}</span>
             </div>
+
+            {/* Volume control row for mobile */}
+            <div className="flex items-center gap-2">
+              <Volume2 className="h-3 w-3 text-muted-foreground" />
+              <Slider
+                value={[isMuted ? 0 : volume]}
+                max={1}
+                step={0.01}
+                onValueChange={handleVolumeChange}
+                className="flex-1"
+              />
+            </div>
           </div>
 
           {/* Desktop layout - Single row */}
