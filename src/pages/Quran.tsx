@@ -3,8 +3,10 @@ import { SurahSelector } from "@/components/quran/SurahSelector";
 import { VerseSelector } from "@/components/quran/VerseSelector";
 import { VerseDisplay } from "@/components/quran/VerseDisplay";
 import { QuranDataLoader } from "@/components/quran/QuranDataLoader";
+import { AudioDataLoader } from "@/components/quran/AudioDataLoader";
 import { TranslationSelector } from "@/components/quran/TranslationSelector";
 import { useSurahs } from "@/hooks/useQuranData";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Quran() {
   const [selectedSurahId, setSelectedSurahId] = useState<number | null>(1); // Default to Al-Fatihah
@@ -30,7 +32,20 @@ export default function Quran() {
                 Read and reflect upon the holy Quran
               </p>
             </div>
-            <QuranDataLoader />
+            <div className="flex gap-2">
+              <Tabs defaultValue="text" className="w-auto">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="text">Text Data</TabsTrigger>
+                  <TabsTrigger value="audio">Audio Data</TabsTrigger>
+                </TabsList>
+                <TabsContent value="text" className="mt-2">
+                  <QuranDataLoader />
+                </TabsContent>
+                <TabsContent value="audio" className="mt-2">
+                  <AudioDataLoader />
+                </TabsContent>
+              </Tabs>
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
