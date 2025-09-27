@@ -64,26 +64,22 @@ export default function Quran() {
               />
             </div>
             
-            {/* Secondary Controls - Stack on mobile, inline on larger screens */}
+            {/* Secondary Controls - Always stacked vertically */}
             {selectedSurahId && currentSurah && (
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center">
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 flex-1">
-                  <div className="w-full sm:w-auto sm:min-w-[140px]">
-                    <VerseSelector
-                      totalVerses={currentSurah.ayah_count}
-                      selectedVerse={selectedVerse}
-                      onVerseChange={setSelectedVerse}
-                    />
-                  </div>
-                  
-                  <div className="hidden sm:block w-px h-6 bg-border"></div>
-                  
-                  <div className="w-full sm:w-auto sm:min-w-[180px]">
-                    <TranslationSelector
-                      selectedTranslator={selectedTranslator}
-                      onTranslatorChange={setSelectedTranslator}
-                    />
-                  </div>
+              <div className="flex flex-col gap-3">
+                <div className="w-full">
+                  <VerseSelector
+                    totalVerses={currentSurah.ayah_count}
+                    selectedVerse={selectedVerse}
+                    onVerseChange={setSelectedVerse}
+                  />
+                </div>
+                
+                <div className="w-full">
+                  <TranslationSelector
+                    selectedTranslator={selectedTranslator}
+                    onTranslatorChange={setSelectedTranslator}
+                  />
                 </div>
               </div>
             )}
