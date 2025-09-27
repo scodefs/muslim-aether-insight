@@ -24,14 +24,16 @@ serve(async (req) => {
     const arabicResponse = await fetch('https://raw.githubusercontent.com/risan/quran-json/main/dist/quran.json')
     const arabicData = await arabicResponse.json()
     
-    // Fetch English translations - both Sahih International and Hilali & Khan
-    const [sahihResponse, hilaliResponse] = await Promise.all([
+    // Fetch English translations and audio data
+    const [sahihResponse, hilaliResponse, audioResponse] = await Promise.all([
       fetch('https://api.alquran.cloud/v1/quran/en.sahih'),
-      fetch('https://api.alquran.cloud/v1/quran/en.hilali')
+      fetch('https://api.alquran.cloud/v1/quran/en.hilali'),
+      fetch('https://api.alquran.cloud/v1/quran/ar.abdurrahmaansudais') // Abdul Rahman Al-Sudais audio
     ])
     
     const sahihData = await sahihResponse.json()
     const hilaliData = await hilaliResponse.json()
+    const audioData = await audioResponse.json()
 
     console.log(`Processing ${arabicData.length} surahs...`)
 
@@ -40,14 +42,16 @@ serve(async (req) => {
       const surah = arabicData[surahIndex]
       const sahihSurah = sahihData.data.surahs[surahIndex]
       const hilaliSurah = hilaliData.data.surahs[surahIndex]
+      const audioSurah = audioData.data.surahs[surahIndex]
       
       console.log(`Processing Surah ${surah.id}: ${surah.name}`)
 
       // Insert all ayahs for this surah with conflict resolution
-      const ayahsToInsert = surah.verses.map((verse: any) => ({
+      const ayahsToInsert = surah.verses.map((verse: any, index: number) => ({
         surah_id: surah.id,
         ayah_number: verse.id,
-        text_ar: verse.text
+        text_ar: verse.text,
+        audio_url: audioSurah?.ayahs?.[index]?.audio || null
       }))
 
       const { data: insertedAyahs, error: ayahError } = await supabase

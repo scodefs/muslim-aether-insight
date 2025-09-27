@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import { useSurahWithAyahs, useSurahs, AyahWithTranslation } from "@/hooks/useQuranData";
+import { AudioControls } from "./AudioControls";
 
 interface VerseDisplayProps {
   surahId: number | null;
@@ -137,16 +138,23 @@ function VerseCard({ ayah, surah, onCopy }: VerseCardProps) {
           </div>
         </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute bottom-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
-          onClick={() => {
-            onCopy(`${ayah.text_ar}\n\n${ayah.ayah_number}. ${ayah.translation?.text_translated || ''}\n\n(${surah.name_en} ${surah.id}:${ayah.ayah_number})`);
-          }}
-        >
-          <Copy className="h-4 w-4" />
-        </Button>
+        <div className="absolute bottom-3 right-3 flex items-center gap-1">
+          <AudioControls 
+            audioUrl={ayah.audio_url || undefined}
+            size="sm"
+            variant="minimal"
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 opacity-60 hover:opacity-100 transition-opacity"
+            onClick={() => {
+              onCopy(`${ayah.text_ar}\n\n${ayah.ayah_number}. ${ayah.translation?.text_translated || ''}\n\n(${surah.name_en} ${surah.id}:${ayah.ayah_number})`);
+            }}
+          >
+            <Copy className="h-3 w-3" />
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
