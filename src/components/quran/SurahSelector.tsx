@@ -56,11 +56,11 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
                     onSurahChange(surah.id);
                     setOpen(false);
                   }}
-                  className="hover:bg-accent hover:text-accent-foreground data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
+                  className="hover:bg-primary/10 hover:text-primary data-[selected=true]:bg-primary/20 data-[selected=true]:text-primary cursor-pointer"
                 >
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
+                      "mr-2 h-4 w-4 text-primary",
                       selectedSurah === surah.id ? "opacity-100" : "opacity-0"
                     )}
                   />
