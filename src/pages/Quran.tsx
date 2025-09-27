@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { SurahSelector } from "@/components/quran/SurahSelector";
 import { VerseSelector } from "@/components/quran/VerseSelector";
-import { LanguageToggle } from "@/components/quran/LanguageToggle";
+
 import { VerseDisplay } from "@/components/quran/VerseDisplay";
 import { quranData } from "@/data/quranData";
 
 export default function Quran() {
   const [selectedSurah, setSelectedSurah] = useState<string>("");
   const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
-  const [language, setLanguage] = useState<"english" | "arabic">("english");
+  
 
   const handleSurahChange = (surahId: string) => {
     setSelectedSurah(surahId);
@@ -45,11 +45,6 @@ export default function Quran() {
                 />
               </div>
             )}
-            
-            <LanguageToggle
-              language={language}
-              onLanguageChange={setLanguage}
-            />
           </div>
         </div>
       </div>
@@ -58,7 +53,6 @@ export default function Quran() {
         <VerseDisplay
           surah={currentSurah}
           selectedVerse={selectedVerse}
-          language={language}
         />
       </div>
     </div>
