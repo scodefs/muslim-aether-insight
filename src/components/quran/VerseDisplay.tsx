@@ -119,12 +119,20 @@ function VerseCard({ ayah, surah, onCopy }: VerseCardProps) {
               {ayah.text_ar}
             </p>
             
-            <p 
-              className="text-sm text-muted-foreground leading-relaxed"
-              dir="ltr"
-            >
-              {ayah.translation?.text_translated}
-            </p>
+            <div className="space-y-2">
+              <p 
+                className="text-sm text-muted-foreground leading-relaxed"
+                dir="ltr"
+              >
+                {ayah.translation?.text_translated}
+              </p>
+              
+              {ayah.translation?.translator_name && (
+                <p className="text-xs text-muted-foreground/70 italic">
+                  — {ayah.translation.translator_name}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
