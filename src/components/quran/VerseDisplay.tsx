@@ -104,6 +104,16 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
     const prevIndex = currentPlayingIndex !== null ? currentPlayingIndex - 1 : 0;
     if (prevIndex >= 0) {
       setCurrentPlayingIndex(prevIndex);
+      // Scroll to the previous verse
+      setTimeout(() => {
+        const verseElement = verseRefs.current[prevIndex];
+        if (verseElement) {
+          verseElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+        }
+      }, 100);
     }
   };
 
