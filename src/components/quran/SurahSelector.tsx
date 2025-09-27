@@ -56,17 +56,17 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
                     onSurahChange(surah.id);
                     setOpen(false);
                   }}
-                  className="hover:bg-muted/30 data-[selected=true]:bg-muted/50"
+                  className="hover:bg-accent hover:text-accent-foreground data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
                 >
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4 text-muted-foreground",
+                      "mr-2 h-4 w-4",
                       selectedSurah === surah.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   <div className="flex flex-col">
-                    <span className="font-medium text-foreground">{surah.name}</span>
-                    <span className="text-sm text-muted-foreground">{surah.arabicName}</span>
+                    <span className="font-medium">{surah.name}</span>
+                    <span className="text-sm opacity-70">{surah.arabicName}</span>
                   </div>
                 </CommandItem>
               ))}
