@@ -8,11 +8,12 @@ import { useSurahWithAyahs, useSurahs, AyahWithTranslation } from "@/hooks/useQu
 interface VerseDisplayProps {
   surahId: number | null;
   selectedVerse: number | null;
+  translatorName?: string;
 }
 
-export function VerseDisplay({ surahId, selectedVerse }: VerseDisplayProps) {
+export function VerseDisplay({ surahId, selectedVerse, translatorName = "Sahih International" }: VerseDisplayProps) {
   const { surahs } = useSurahs();
-  const { ayahs, loading, error } = useSurahWithAyahs(surahId);
+  const { ayahs, loading, error } = useSurahWithAyahs(surahId, 'en', translatorName);
   
   const surah = surahId ? surahs.find(s => s.id === surahId) : null;
 

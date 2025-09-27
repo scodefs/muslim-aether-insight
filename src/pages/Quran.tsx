@@ -3,11 +3,13 @@ import { SurahSelector } from "@/components/quran/SurahSelector";
 import { VerseSelector } from "@/components/quran/VerseSelector";
 import { VerseDisplay } from "@/components/quran/VerseDisplay";
 import { QuranDataLoader } from "@/components/quran/QuranDataLoader";
+import { TranslationSelector } from "@/components/quran/TranslationSelector";
 import { useSurahs } from "@/hooks/useQuranData";
 
 export default function Quran() {
   const [selectedSurahId, setSelectedSurahId] = useState<number | null>(1); // Default to Al-Fatihah
   const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
+  const [selectedTranslator, setSelectedTranslator] = useState<string>("Sahih International");
   const { surahs, loading } = useSurahs();
 
   const handleSurahChange = (surahId: number) => {
@@ -51,6 +53,13 @@ export default function Quran() {
                     onVerseChange={setSelectedVerse}
                   />
                 </div>
+                <div className="hidden sm:block w-px h-6 bg-border"></div>
+                <div className="w-full sm:w-auto">
+                  <TranslationSelector
+                    selectedTranslator={selectedTranslator}
+                    onTranslatorChange={setSelectedTranslator}
+                  />
+                </div>
               </>
             )}
           </div>
@@ -61,6 +70,7 @@ export default function Quran() {
         <VerseDisplay
           surahId={selectedSurahId}
           selectedVerse={selectedVerse}
+          translatorName={selectedTranslator}
         />
       </div>
     </div>

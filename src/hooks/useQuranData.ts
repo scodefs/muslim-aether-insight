@@ -57,7 +57,7 @@ export function useSurahs() {
   return { surahs, loading, error };
 }
 
-export function useSurahWithAyahs(surahId: number | null, languageCode: string = 'en') {
+export function useSurahWithAyahs(surahId: number | null, languageCode: string = 'en', translatorName: string = 'Sahih International') {
   const [ayahs, setAyahs] = useState<AyahWithTranslation[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -84,6 +84,7 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
           `)
           .eq('surah_id', surahId)
           .eq('translations.language_code', languageCode)
+          .eq('translations.translator_name', translatorName)
           .order('ayah_number');
 
         if (error) throw error;
@@ -112,7 +113,7 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
     }
 
     fetchAyahs();
-  }, [surahId, languageCode]);
+  }, [surahId, languageCode, translatorName]);
 
   return { ayahs, loading, error };
 }
