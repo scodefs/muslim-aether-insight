@@ -1,5 +1,4 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { BookOpen } from "lucide-react";
 
 interface TranslationSelectorProps {
   selectedTranslator: string;
@@ -13,20 +12,17 @@ const AVAILABLE_TRANSLATORS = [
 
 export function TranslationSelector({ selectedTranslator, onTranslatorChange }: TranslationSelectorProps) {
   return (
-    <div className="flex items-center gap-2">
-      <BookOpen className="h-4 w-4 text-muted-foreground" />
-      <Select value={selectedTranslator} onValueChange={onTranslatorChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select translation" />
-        </SelectTrigger>
-        <SelectContent>
-          {AVAILABLE_TRANSLATORS.map((translator) => (
-            <SelectItem key={translator.value} value={translator.value}>
-              {translator.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+    <Select value={selectedTranslator} onValueChange={onTranslatorChange}>
+      <SelectTrigger className="w-full sm:w-[180px] hover:bg-primary/10 hover:text-primary border-none focus:ring-0 focus:ring-offset-0 text-foreground">
+        <SelectValue placeholder="Select translation" />
+      </SelectTrigger>
+      <SelectContent className="border-border bg-popover shadow-sm">
+        {AVAILABLE_TRANSLATORS.map((translator) => (
+          <SelectItem key={translator.value} value={translator.value} className="hover:bg-primary/10 hover:text-primary focus:bg-primary/20 focus:text-primary cursor-pointer">
+            {translator.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
