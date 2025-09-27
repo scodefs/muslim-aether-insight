@@ -112,94 +112,94 @@ export function BottomAudioPlayer({
   if (!currentVerse) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 pl-64 p-4 bg-background/95 backdrop-blur-sm border-t animate-fade-in">
-      <Card className="max-w-4xl mx-auto relative">
-        <div className="p-4">
+    <div className="fixed bottom-0 left-0 right-0 z-50 pl-64 p-2 bg-background/95 backdrop-blur-sm border-t animate-fade-in">
+      <Card className="max-w-2xl mx-auto relative">
+        <div className="p-2">
           {/* Close button */}
           <Button
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="absolute top-2 right-2 h-6 w-6 opacity-60 hover:opacity-100 transition-opacity"
+            className="absolute top-1 right-1 h-5 w-5 opacity-60 hover:opacity-100 transition-opacity"
           >
-            <X className="h-4 w-4" />
+            <X className="h-3 w-3" />
           </Button>
 
-          {/* Current verse info */}
-          <div className="text-center mb-4">
-            <p className="text-sm text-muted-foreground">Now Playing</p>
-            <p className="font-medium text-sm">Verse {currentVerse.ayah_number}</p>
-          </div>
-
-          {/* Progress bar */}
-          <div className="mb-4">
-            <Slider
-              value={[currentTime]}
-              max={duration || 100}
-              step={0.1}
-              onValueChange={handleSeek}
-              className="w-full"
-            />
-            <div className="flex justify-between text-xs text-muted-foreground mt-1">
-              <span>{formatTime(currentTime)}</span>
-              <span>{formatTime(duration)}</span>
+          {/* Compact layout */}
+          <div className="flex items-center gap-3">
+            {/* Verse info */}
+            <div className="text-xs text-muted-foreground min-w-fit">
+              Verse {currentVerse.ayah_number}
             </div>
-          </div>
 
-          {/* Control buttons */}
-          <div className="flex items-center justify-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onPrevious}
-              className="h-8 w-8"
-            >
-              <SkipBack className="h-4 w-4" />
-            </Button>
+            {/* Control buttons */}
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onPrevious}
+                className="h-6 w-6"
+              >
+                <SkipBack className="h-3 w-3" />
+              </Button>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onRepeat}
-              className="h-8 w-8"
-            >
-              <RotateCcw className="h-4 w-4" />
-            </Button>
+              <Button
+                variant="default"
+                size="icon"
+                onClick={togglePlayPause}
+                className="h-7 w-7"
+              >
+                {isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+              </Button>
 
-            <Button
-              variant="default"
-              size="icon"
-              onClick={togglePlayPause}
-              className="h-10 w-10"
-            >
-              {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-            </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onNext}
+                className="h-6 w-6"
+              >
+                <SkipForward className="h-3 w-3" />
+              </Button>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onNext}
-              className="h-8 w-8"
-            >
-              <SkipForward className="h-4 w-4" />
-            </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onRepeat}
+                className="h-6 w-6"
+              >
+                <RotateCcw className="h-3 w-3" />
+              </Button>
+            </div>
+
+            {/* Progress bar */}
+            <div className="flex-1 flex items-center gap-2">
+              <span className="text-xs text-muted-foreground min-w-fit">{formatTime(currentTime)}</span>
+              <Slider
+                value={[currentTime]}
+                max={duration || 100}
+                step={0.1}
+                onValueChange={handleSeek}
+                className="flex-1"
+              />
+              <span className="text-xs text-muted-foreground min-w-fit">{formatTime(duration)}</span>
+            </div>
 
             {/* Volume control */}
-            <div className="flex items-center gap-2 ml-4">
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={toggleMute}
-                className="h-8 w-8"
+                className="h-6 w-6"
               >
-                <Volume2 className="h-4 w-4" />
+                <Volume2 className="h-3 w-3" />
               </Button>
               <Slider
                 value={[isMuted ? 0 : volume]}
                 max={1}
                 step={0.01}
                 onValueChange={handleVolumeChange}
-                className="w-20"
+                className="w-16"
               />
             </div>
           </div>
