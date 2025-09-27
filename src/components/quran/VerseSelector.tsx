@@ -20,10 +20,10 @@ export function VerseSelector({ totalVerses, selectedVerse, onVerseChange }: Ver
         onVerseChange(value === "all" ? null : parseInt(value));
       }}
     >
-      <SelectTrigger className="w-full sm:w-[140px] hover:bg-accent/50 border-none rounded-none">
+      <SelectTrigger className="w-full sm:w-[140px] hover:bg-accent/50 border-none">
         <SelectValue placeholder="Select verse" />
       </SelectTrigger>
-      <SelectContent className="shadow-lg border-none rounded-none">
+      <SelectContent className="shadow-lg border-none">
         <SelectItem value="all">All verses</SelectItem>
         {Array.from({ length: totalVerses }, (_, i) => i + 1).map((verse) => (
           <SelectItem key={verse} value={verse.toString()}>
