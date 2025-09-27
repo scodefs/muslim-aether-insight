@@ -93,17 +93,35 @@ serve(async (req) => {
       allTranslationsToInsert.push(...sahihTranslations, ...hilaliTranslations)
 
       if (allTranslationsToInsert.length > 0) {
-        // Insert translations in smaller batches to avoid conflicts
-        for (const translation of allTranslationsToInsert) {
-          const { error: translationError } = await supabase
+        // Insert translations in batches, handling conflicts properly
+        const sahihBatch = allTranslationsToInsert.filter(t => t.translator_name === 'Sahih International');
+        const hilaliBatch = allTranslationsToInsert.filter(t => t.translator_name === 'Hilali & Khan');
+        
+        // Insert Sahih International translations
+        if (sahihBatch.length > 0) {
+          const { error: sahihError } = await supabase
             .from('translations')
-            .upsert([translation], { 
+            .upsert(sahihBatch, { 
               onConflict: 'ayah_id,language_code,translator_name',
               ignoreDuplicates: false 
             })
 
-          if (translationError) {
-            console.error(`Error inserting translation for ayah ${translation.ayah_id}:`, translationError)
+          if (sahihError) {
+            console.error(`Error inserting Sahih translations for surah ${surah.id}:`, sahihError)
+          }
+        }
+        
+        // Insert Hilali & Khan translations
+        if (hilaliBatch.length > 0) {
+          const { error: hilaliError } = await supabase
+            .from('translations')
+            .upsert(hilaliBatch, { 
+              onConflict: 'ayah_id,language_code,translator_name',
+              ignoreDuplicates: false 
+            })
+
+          if (hilaliError) {
+            console.error(`Error inserting Hilali translations for surah ${surah.id}:`, hilaliError)
           }
         }
         
