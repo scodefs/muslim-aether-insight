@@ -1,4 +1,4 @@
-import { MessageSquare, BarChart3 } from "lucide-react";
+import { MessageSquare, BarChart3, Heart } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -14,6 +14,7 @@ import {
 
 const items = [
   { title: "AI Chat", url: "/", icon: MessageSquare },
+  { title: "Daily Guidance", url: "/daily-guidance", icon: Heart },
   { title: "Dashboard", url: "/dashboard", icon: BarChart3 },
 ];
 
