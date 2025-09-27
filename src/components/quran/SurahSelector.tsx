@@ -1,4 +1,4 @@
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,15 +34,15 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
           variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between hover:bg-accent/50 border-none rounded-none"
+          className="w-full justify-between hover:bg-accent/50"
         >
           {selectedSurah
             ? `${selectedSurahData?.name} (${selectedSurahData?.arabicName})`
             : "Select a Surah..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0 border-none rounded-none shadow-lg">
+      <PopoverContent className="w-full p-0 shadow-lg">
         <Command>
           <CommandInput placeholder="Search Surah..." />
           <CommandList>
