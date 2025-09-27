@@ -2,18 +2,19 @@ import { useState } from "react";
 import { SurahSelector } from "@/components/quran/SurahSelector";
 import { VerseSelector } from "@/components/quran/VerseSelector";
 import { VerseDisplay } from "@/components/quran/VerseDisplay";
-import { quranData } from "@/data/quranData";
+import { useSurahs } from "@/hooks/useQuranData";
 
 export default function Quran() {
-  const [selectedSurah, setSelectedSurah] = useState<string>("al-fatihah");
+  const [selectedSurahId, setSelectedSurahId] = useState<number | null>(1); // Default to Al-Fatihah
   const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
+  const { surahs, loading } = useSurahs();
 
-  const handleSurahChange = (surahId: string) => {
-    setSelectedSurah(surahId);
+  const handleSurahChange = (surahId: number) => {
+    setSelectedSurahId(surahId);
     setSelectedVerse(null); // Reset verse selection when surah changes
   };
 
-  const currentSurah = selectedSurah ? quranData.surahs.find(s => s.id === selectedSurah) : null;
+  const currentSurah = selectedSurahId ? surahs.find(s => s.id === selectedSurahId) : null;
 
   return (
     <div className="flex-1 flex flex-col h-full">
@@ -29,17 +30,19 @@ export default function Quran() {
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
             <div className="flex-1 w-full sm:w-auto">
               <SurahSelector
-                selectedSurah={selectedSurah}
+                selectedSurah={selectedSurahId}
                 onSurahChange={handleSurahChange}
+                surahs={surahs}
+                loading={loading}
               />
             </div>
             
-            {selectedSurah && currentSurah && (
+            {selectedSurahId && currentSurah && (
               <>
                 <div className="hidden sm:block w-px h-6 bg-border"></div>
                 <div className="w-full sm:w-auto">
                   <VerseSelector
-                    totalVerses={currentSurah.verses.length}
+                    totalVerses={currentSurah.ayah_count}
                     selectedVerse={selectedVerse}
                     onVerseChange={setSelectedVerse}
                   />
@@ -52,7 +55,7 @@ export default function Quran() {
 
       <div className="flex-1 overflow-hidden">
         <VerseDisplay
-          surah={currentSurah}
+          surahId={selectedSurahId}
           selectedVerse={selectedVerse}
         />
       </div>

@@ -14,18 +14,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { quranData } from "@/data/quranData";
 import { useState } from "react";
+import { Surah } from "@/hooks/useQuranData";
 
 interface SurahSelectorProps {
-  selectedSurah: string;
-  onSurahChange: (surahId: string) => void;
+  selectedSurah: number | null;
+  onSurahChange: (surahId: number) => void;
+  surahs: Surah[];
+  loading: boolean;
 }
 
-export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorProps) {
+export function SurahSelector({ selectedSurah, onSurahChange, surahs, loading }: SurahSelectorProps) {
   const [open, setOpen] = useState(false);
 
-  const selectedSurahData = quranData.surahs.find((surah) => surah.id === selectedSurah);
+  const selectedSurahData = surahs.find((surah) => surah.id === selectedSurah);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -36,8 +38,10 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
           aria-expanded={open}
           className="w-full justify-between hover:bg-primary/10 hover:text-primary border-none focus:ring-0 focus:ring-offset-0 text-foreground transition-colors"
         >
-          {selectedSurah
-            ? `${selectedSurahData?.name} (${selectedSurahData?.arabicName})`
+          {loading 
+            ? "Loading..."
+            : selectedSurah && selectedSurahData
+            ? `${selectedSurahData.name_en} (${selectedSurahData.name_ar})`
             : "Select a Surah..."}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -48,10 +52,10 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
           <CommandList>
             <CommandEmpty>No Surah found.</CommandEmpty>
             <CommandGroup>
-              {quranData.surahs.map((surah) => (
+              {surahs.map((surah) => (
                 <CommandItem
                   key={surah.id}
-                  value={`${surah.name} ${surah.arabicName}`}
+                  value={`${surah.name_en} ${surah.name_ar}`}
                   onSelect={() => {
                     onSurahChange(surah.id);
                     setOpen(false);
@@ -65,8 +69,8 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
                     )}
                   />
                   <div className="flex flex-col">
-                    <span className="font-medium">{surah.name}</span>
-                    <span className="text-sm opacity-70">{surah.arabicName}</span>
+                    <span className="font-medium">{surah.name_en}</span>
+                    <span className="text-sm opacity-70">{surah.name_ar}</span>
                   </div>
                 </CommandItem>
               ))}
