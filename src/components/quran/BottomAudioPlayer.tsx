@@ -31,7 +31,9 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const volumePopupRef = useRef<HTMLDivElement>(null);
 
   // Auto-play when current verse changes
   useEffect(() => {
@@ -69,6 +71,18 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
       audio.removeEventListener('ended', handleEnded);
     };
   }, [onNext]);
+
+  // Close volume popup when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (volumePopupRef.current && !volumePopupRef.current.contains(event.target as Node)) {
+        setShowVolumeSlider(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const togglePlayPause = () => {
     const audio = audioRef.current;
@@ -196,14 +210,32 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                 <RotateCcw className="h-4 w-4" />
               </Button>
 
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleMute}
-                className="h-8 w-8 hover:scale-105 transition-transform"
-              >
-                <Volume2 className="h-4 w-4" />
-              </Button>
+              <div className="relative" ref={volumePopupRef}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowVolumeSlider(!showVolumeSlider)}
+                  className="h-8 w-8 hover:scale-105 transition-transform"
+                >
+                  <Volume2 className="h-4 w-4" />
+                </Button>
+                
+                {/* Volume popup */}
+                {showVolumeSlider && (
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-background border rounded-lg p-3 shadow-lg z-10 w-32">
+                    <div className="flex items-center gap-2">
+                      <Volume2 className="h-3 w-3 text-muted-foreground" />
+                      <Slider
+                        value={[isMuted ? 0 : volume]}
+                        max={1}
+                        step={0.01}
+                        onValueChange={handleVolumeChange}
+                        className="flex-1"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Bottom row: Progress bar with times */}
@@ -217,18 +249,6 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                 className="flex-1"
               />
               <span className="text-xs text-muted-foreground min-w-fit">{formatTime(duration)}</span>
-            </div>
-
-            {/* Volume control row for mobile */}
-            <div className="flex items-center gap-2">
-              <Volume2 className="h-3 w-3 text-muted-foreground" />
-              <Slider
-                value={[isMuted ? 0 : volume]}
-                max={1}
-                step={0.01}
-                onValueChange={handleVolumeChange}
-                className="flex-1"
-              />
             </div>
           </div>
 
