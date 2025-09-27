@@ -24,9 +24,9 @@ export function VerseSelector({ totalVerses, selectedVerse, onVerseChange }: Ver
         <SelectValue placeholder="Select verse" />
       </SelectTrigger>
       <SelectContent className="border-border bg-popover shadow-sm">
-        <SelectItem value="all" className="hover:bg-muted/30 focus:bg-muted/50 text-foreground">All verses</SelectItem>
+        <SelectItem value="all" className="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">All verses</SelectItem>
         {Array.from({ length: totalVerses }, (_, i) => i + 1).map((verse) => (
-          <SelectItem key={verse} value={verse.toString()} className="hover:bg-muted/30 focus:bg-muted/50 text-foreground">
+          <SelectItem key={verse} value={verse.toString()} className="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
             Verse {verse}
           </SelectItem>
         ))}
