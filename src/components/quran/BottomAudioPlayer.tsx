@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, SkipBack, SkipForward, Volume2, RotateCcw } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, RotateCcw, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { AyahWithTranslation } from "@/hooks/useQuranData";
 
@@ -112,9 +112,19 @@ export function BottomAudioPlayer({
   if (!currentVerse) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-background/95 backdrop-blur-sm border-t animate-fade-in">
-      <Card className="max-w-4xl mx-auto">
+    <div className="fixed bottom-0 left-0 right-0 z-50 pl-64 p-4 bg-background/95 backdrop-blur-sm border-t animate-fade-in">
+      <Card className="max-w-4xl mx-auto relative">
         <div className="p-4">
+          {/* Close button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="absolute top-2 right-2 h-6 w-6 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+
           {/* Current verse info */}
           <div className="text-center mb-4">
             <p className="text-sm text-muted-foreground">Now Playing</p>
