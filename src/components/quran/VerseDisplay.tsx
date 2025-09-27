@@ -107,7 +107,7 @@ function VerseCard({ verse, surah, onCopy }: VerseCardProps) {
           className="absolute top-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
           onClick={() => {
             const chapterNumber = quranData.surahs.findIndex(s => s.id === surah.id) + 1;
-            onCopy(`${verse.arabic}\n\n"${verse.number}. ${verse.english}"\n\n(${surah.name} ${chapterNumber}:${verse.number})`);
+            onCopy(`${verse.arabic}\n\n${verse.number}. ${verse.english}\n\n(${surah.name} ${chapterNumber}:${verse.number})`);
           }}
         >
           <Copy className="h-4 w-4" />
