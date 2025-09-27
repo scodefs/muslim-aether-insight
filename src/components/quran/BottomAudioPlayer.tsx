@@ -2,8 +2,12 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, SkipBack, SkipForward, Volume2, RotateCcw, X } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import { AyahWithTranslation } from "@/hooks/useQuranData";
+
+export interface AudioPlayerRef {
+  togglePlayPause: () => void;
+}
 
 interface BottomAudioPlayerProps {
   currentVerse: AyahWithTranslation | null;
@@ -14,14 +18,14 @@ interface BottomAudioPlayerProps {
   onPlayingStateChange?: (isPlaying: boolean) => void;
 }
 
-export function BottomAudioPlayer({
+export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerProps>(({
   currentVerse,
   onNext,
   onPrevious,
   onRepeat,
   onClose,
   onPlayingStateChange
-}: BottomAudioPlayerProps) {
+}, ref) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -81,6 +85,11 @@ export function BottomAudioPlayer({
       });
     }
   };
+
+  // Expose methods to parent component
+  useImperativeHandle(ref, () => ({
+    togglePlayPause
+  }));
 
   const handleSeek = (value: number[]) => {
     const audio = audioRef.current;
@@ -232,4 +241,6 @@ export function BottomAudioPlayer({
       />
     </div>
   );
-}
+});
+
+BottomAudioPlayer.displayName = "BottomAudioPlayer";

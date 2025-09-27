@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, Play, Pause } from "lucide-react";
 import { toast } from "sonner";
 import { useSurahWithAyahs, useSurahs, AyahWithTranslation } from "@/hooks/useQuranData";
-import { BottomAudioPlayer } from "./BottomAudioPlayer";
+import { BottomAudioPlayer, AudioPlayerRef } from "./BottomAudioPlayer";
 import { useState, useRef, useEffect } from "react";
 
 interface VerseDisplayProps {
@@ -19,6 +19,7 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number | null>(null);
   const [showBottomPlayer, setShowBottomPlayer] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const audioControlRef = useRef<AudioPlayerRef | null>(null);
   const verseRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   
   const surah = surahId ? surahs.find(s => s.id === surahId) : null;
@@ -77,11 +78,13 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
     : ayahs;
 
   const handlePlayVerse = (index: number) => {
-    if (currentPlayingIndex === index && isAudioPlaying) {
-      // If the same verse is playing, pause it
-      setIsAudioPlaying(false);
+    if (currentPlayingIndex === index) {
+      // If clicking on the currently selected verse, toggle play/pause
+      if (audioControlRef.current) {
+        audioControlRef.current.togglePlayPause();
+      }
     } else {
-      // Otherwise play this verse
+      // Otherwise switch to this verse and play
       setCurrentPlayingIndex(index);
       setShowBottomPlayer(true);
       setIsAudioPlaying(true);
@@ -172,6 +175,7 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
 
       {showBottomPlayer && (
         <BottomAudioPlayer
+          ref={audioControlRef}
           currentVerse={currentVerse}
           onNext={handleNext}
           onPrevious={handlePrevious}
