@@ -140,7 +140,7 @@ function VerseCard({ ayah, surah, onCopy }: VerseCardProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
+          className="absolute bottom-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
           onClick={() => {
             onCopy(`${ayah.text_ar}\n\n${ayah.ayah_number}. ${ayah.translation?.text_translated || ''}\n\n(${surah.name_en} ${surah.id}:${ayah.ayah_number})`);
           }}
