@@ -34,7 +34,7 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
           variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between hover:bg-muted/30 border-none focus:ring-0 focus:ring-offset-0 text-foreground"
+          className="w-full justify-between hover:bg-primary/10 hover:text-primary border-none focus:ring-0 focus:ring-offset-0 text-foreground transition-colors"
         >
           {selectedSurah
             ? `${selectedSurahData?.name} (${selectedSurahData?.arabicName})`
