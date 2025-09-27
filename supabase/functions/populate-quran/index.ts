@@ -24,16 +24,22 @@ serve(async (req) => {
     const arabicResponse = await fetch('https://raw.githubusercontent.com/risan/quran-json/main/dist/quran.json')
     const arabicData = await arabicResponse.json()
     
-    // Fetch English translations
-    const englishResponse = await fetch('https://api.alquran.cloud/v1/quran/en.sahih')
-    const englishData = await englishResponse.json()
+    // Fetch English translations - both Sahih International and Hilali & Khan
+    const [sahihResponse, hilaliResponse] = await Promise.all([
+      fetch('https://api.alquran.cloud/v1/quran/en.sahih'),
+      fetch('https://api.alquran.cloud/v1/quran/en.hilali')
+    ])
+    
+    const sahihData = await sahihResponse.json()
+    const hilaliData = await hilaliResponse.json()
 
     console.log(`Processing ${arabicData.length} surahs...`)
 
     // Process each Surah
     for (let surahIndex = 0; surahIndex < arabicData.length; surahIndex++) {
       const surah = arabicData[surahIndex]
-      const englishSurah = englishData.data.surahs[surahIndex]
+      const sahihSurah = sahihData.data.surahs[surahIndex]
+      const hilaliSurah = hilaliData.data.surahs[surahIndex]
       
       console.log(`Processing Surah ${surah.id}: ${surah.name}`)
 
@@ -59,30 +65,49 @@ serve(async (req) => {
 
       console.log(`Inserted ${insertedAyahs.length} ayahs for Surah ${surah.id}`)
 
-      // Insert translations for each ayah
-      const translationsToInsert = insertedAyahs.map((ayah: any, index: number) => {
-        const englishVerse = englishSurah?.ayahs?.[index]
+      // Insert translations for each ayah - both Sahih International and Hilali & Khan
+      const allTranslationsToInsert = []
+      
+      // Sahih International translations
+      const sahihTranslations = insertedAyahs.map((ayah: any, index: number) => {
+        const sahihVerse = sahihSurah?.ayahs?.[index]
         return {
           ayah_id: ayah.id,
           language_code: 'en',
-          text_translated: englishVerse?.text || '',
+          text_translated: sahihVerse?.text || '',
           translator_name: 'Sahih International'
         }
-      }).filter(t => t.text_translated) // Only insert if translation exists
-
-      if (translationsToInsert.length > 0) {
-        const { error: translationError } = await supabase
-          .from('translations')
-          .upsert(translationsToInsert, { 
-            onConflict: 'ayah_id,language_code',
-            ignoreDuplicates: false 
-          })
-
-        if (translationError) {
-          console.error(`Error inserting translations for surah ${surah.id}:`, translationError)
-        } else {
-          console.log(`Inserted ${translationsToInsert.length} translations for Surah ${surah.id}`)
+      }).filter(t => t.text_translated)
+      
+      // Hilali & Khan translations  
+      const hilaliTranslations = insertedAyahs.map((ayah: any, index: number) => {
+        const hilaliVerse = hilaliSurah?.ayahs?.[index]
+        return {
+          ayah_id: ayah.id,
+          language_code: 'en',
+          text_translated: hilaliVerse?.text || '',
+          translator_name: 'Hilali & Khan'
         }
+      }).filter(t => t.text_translated)
+      
+      allTranslationsToInsert.push(...sahihTranslations, ...hilaliTranslations)
+
+      if (allTranslationsToInsert.length > 0) {
+        // Insert translations in smaller batches to avoid conflicts
+        for (const translation of allTranslationsToInsert) {
+          const { error: translationError } = await supabase
+            .from('translations')
+            .upsert([translation], { 
+              onConflict: 'ayah_id,language_code,translator_name',
+              ignoreDuplicates: false 
+            })
+
+          if (translationError) {
+            console.error(`Error inserting translation for ayah ${translation.ayah_id}:`, translationError)
+          }
+        }
+        
+        console.log(`Processed ${allTranslationsToInsert.length} translations for Surah ${surah.id}`)
       }
     }
 
