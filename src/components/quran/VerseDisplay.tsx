@@ -8,10 +8,9 @@ import { Surah, Verse } from "@/data/quranData";
 interface VerseDisplayProps {
   surah: Surah | null;
   selectedVerse: number | null;
-  language: "english" | "arabic";
 }
 
-export function VerseDisplay({ surah, selectedVerse, language }: VerseDisplayProps) {
+export function VerseDisplay({ surah, selectedVerse }: VerseDisplayProps) {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -60,7 +59,6 @@ export function VerseDisplay({ surah, selectedVerse, language }: VerseDisplayPro
             <VerseCard
               key={verse.number}
               verse={verse}
-              language={language}
               onCopy={copyToClipboard}
             />
           ))}
@@ -72,14 +70,10 @@ export function VerseDisplay({ surah, selectedVerse, language }: VerseDisplayPro
 
 interface VerseCardProps {
   verse: Verse;
-  language: "english" | "arabic";
   onCopy: (text: string) => void;
 }
 
-function VerseCard({ verse, language, onCopy }: VerseCardProps) {
-  const displayText = language === "arabic" ? verse.arabic : verse.english;
-  const isArabic = language === "arabic";
-
+function VerseCard({ verse, onCopy }: VerseCardProps) {
   return (
     <Card className="hover:shadow-md transition-shadow animate-fade-in relative">
       <CardContent className="p-6">
@@ -90,24 +84,18 @@ function VerseCard({ verse, language, onCopy }: VerseCardProps) {
           
           <div className="flex-1 space-y-3">
             <p 
-              className={`leading-relaxed ${
-                isArabic 
-                  ? "text-right text-xl font-medium" 
-                  : "text-base"
-              }`}
-              dir={isArabic ? "rtl" : "ltr"}
+              className="leading-relaxed text-right text-xl font-medium"
+              dir="rtl"
             >
-              {displayText}
+              {verse.arabic}
             </p>
             
-            {!isArabic && (
-              <p 
-                className="text-sm text-muted-foreground leading-relaxed text-right text-lg"
-                dir="rtl"
-              >
-                {verse.arabic}
-              </p>
-            )}
+            <p 
+              className="text-sm text-muted-foreground leading-relaxed"
+              dir="ltr"
+            >
+              {verse.english}
+            </p>
           </div>
         </div>
 
@@ -115,7 +103,7 @@ function VerseCard({ verse, language, onCopy }: VerseCardProps) {
           variant="ghost"
           size="icon"
           className="absolute top-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
-          onClick={() => onCopy(displayText)}
+          onClick={() => onCopy(verse.arabic)}
         >
           <Copy className="h-4 w-4" />
         </Button>
