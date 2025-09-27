@@ -3,7 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
-import { Surah, Verse } from "@/data/quranData";
+import { Surah, Verse, quranData } from "@/data/quranData";
 
 interface VerseDisplayProps {
   surah: Surah | null;
@@ -105,7 +105,10 @@ function VerseCard({ verse, surah, onCopy }: VerseCardProps) {
           variant="ghost"
           size="icon"
           className="absolute top-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
-          onClick={() => onCopy(`${verse.arabic}\n\n"${verse.number}. ${verse.english}"\n\n(${surah.name} ${verse.number})`)}
+          onClick={() => {
+            const chapterNumber = quranData.surahs.findIndex(s => s.id === surah.id) + 1;
+            onCopy(`${verse.arabic}\n\n"${verse.number}. ${verse.english}"\n\n(${surah.name} ${chapterNumber}:${verse.number})`);
+          }}
         >
           <Copy className="h-4 w-4" />
         </Button>
