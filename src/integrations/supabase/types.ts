@@ -14,13 +14,129 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ayahs: {
+        Row: {
+          audio_url: string | null
+          ayah_number: number
+          created_at: string | null
+          id: number
+          surah_id: number
+          text_ar: string
+        }
+        Insert: {
+          audio_url?: string | null
+          ayah_number: number
+          created_at?: string | null
+          id?: number
+          surah_id: number
+          text_ar: string
+        }
+        Update: {
+          audio_url?: string | null
+          ayah_number?: number
+          created_at?: string | null
+          id?: number
+          surah_id?: number
+          text_ar?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ayahs_surah_id_fkey"
+            columns: ["surah_id"]
+            isOneToOne: false
+            referencedRelation: "surahs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      surahs: {
+        Row: {
+          ayah_count: number
+          created_at: string | null
+          id: number
+          name_ar: string
+          name_en: string
+          revelation_place: string
+        }
+        Insert: {
+          ayah_count: number
+          created_at?: string | null
+          id?: number
+          name_ar: string
+          name_en: string
+          revelation_place: string
+        }
+        Update: {
+          ayah_count?: number
+          created_at?: string | null
+          id?: number
+          name_ar?: string
+          name_en?: string
+          revelation_place?: string
+        }
+        Relationships: []
+      }
+      translations: {
+        Row: {
+          ayah_id: number
+          created_at: string | null
+          id: number
+          language_code: string
+          text_translated: string
+          translator_name: string | null
+        }
+        Insert: {
+          ayah_id: number
+          created_at?: string | null
+          id?: number
+          language_code: string
+          text_translated: string
+          translator_name?: string | null
+        }
+        Update: {
+          ayah_id?: number
+          created_at?: string | null
+          id?: number
+          language_code?: string
+          text_translated?: string
+          translator_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "translations_ayah_id_fkey"
+            columns: ["ayah_id"]
+            isOneToOne: false
+            referencedRelation: "ayahs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_surah_with_translations: {
+        Args: { lang_code?: string; surah_id_param: number }
+        Returns: {
+          ayah_number: number
+          ayah_text_ar: string
+          surah_name: string
+          surah_name_ar: string
+          translation: string
+        }[]
+      }
+      search_quran: {
+        Args: { lang?: string; search_term: string }
+        Returns: {
+          ayah_number: number
+          ayah_text: string
+          rank: number
+          surah_name: string
+          surah_name_ar: string
+          translation: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
