@@ -115,16 +115,6 @@ export function BottomAudioPlayer({
     <div className="fixed bottom-0 left-0 right-0 z-50 pl-64 p-2 bg-background/95 backdrop-blur-sm border-t animate-fade-in">
       <Card className="max-w-2xl mx-auto relative">
         <div className="p-2">
-          {/* Close button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="absolute top-1 right-1 h-5 w-5 opacity-60 hover:opacity-100 transition-opacity"
-          >
-            <X className="h-3 w-3" />
-          </Button>
-
           {/* Compact layout */}
           <div className="flex items-center gap-3">
             {/* Verse info */}
@@ -138,7 +128,7 @@ export function BottomAudioPlayer({
                 variant="ghost"
                 size="icon"
                 onClick={onPrevious}
-                className="h-6 w-6"
+                className="h-6 w-6 hover:scale-105 transition-transform"
               >
                 <SkipBack className="h-3 w-3" />
               </Button>
@@ -147,7 +137,7 @@ export function BottomAudioPlayer({
                 variant="default"
                 size="icon"
                 onClick={togglePlayPause}
-                className="h-7 w-7"
+                className="h-7 w-7 hover:scale-105 transition-transform"
               >
                 {isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
               </Button>
@@ -156,7 +146,7 @@ export function BottomAudioPlayer({
                 variant="ghost"
                 size="icon"
                 onClick={onNext}
-                className="h-6 w-6"
+                className="h-6 w-6 hover:scale-105 transition-transform"
               >
                 <SkipForward className="h-3 w-3" />
               </Button>
@@ -165,7 +155,7 @@ export function BottomAudioPlayer({
                 variant="ghost"
                 size="icon"
                 onClick={onRepeat}
-                className="h-6 w-6"
+                className="h-6 w-6 hover:scale-105 transition-transform"
               >
                 <RotateCcw className="h-3 w-3" />
               </Button>
@@ -185,23 +175,35 @@ export function BottomAudioPlayer({
             </div>
 
             {/* Volume control */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 group">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={toggleMute}
-                className="h-6 w-6"
+                className="h-6 w-6 hover:scale-105 transition-transform"
               >
                 <Volume2 className="h-3 w-3" />
               </Button>
-              <Slider
-                value={[isMuted ? 0 : volume]}
-                max={1}
-                step={0.01}
-                onValueChange={handleVolumeChange}
-                className="w-16"
-              />
+              <div className="w-0 overflow-hidden transition-all duration-300 group-hover:w-16">
+                <Slider
+                  value={[isMuted ? 0 : volume]}
+                  max={1}
+                  step={0.01}
+                  onValueChange={handleVolumeChange}
+                  className="w-16 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                />
+              </div>
             </div>
+
+            {/* Close button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="h-6 w-6 opacity-40 hover:opacity-100 hover:scale-105 transition-all duration-200 ml-2"
+            >
+              <X className="h-3 w-3" />
+            </Button>
           </div>
         </div>
       </Card>
