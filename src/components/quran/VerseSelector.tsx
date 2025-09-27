@@ -20,7 +20,7 @@ export function VerseSelector({ totalVerses, selectedVerse, onVerseChange }: Ver
         onVerseChange(value === "all" ? null : parseInt(value));
       }}
     >
-      <SelectTrigger className="w-full sm:w-[140px] hover:bg-accent/50 border-none">
+      <SelectTrigger className="w-full sm:w-[140px] hover:bg-accent/50 border-none focus:ring-0 focus:ring-offset-0">
         <SelectValue placeholder="Select verse" />
       </SelectTrigger>
       <SelectContent className="shadow-lg border-none">
