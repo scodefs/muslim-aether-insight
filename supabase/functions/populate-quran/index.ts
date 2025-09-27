@@ -37,7 +37,7 @@ serve(async (req) => {
       
       console.log(`Processing Surah ${surah.id}: ${surah.name}`)
 
-      // Insert all ayahs for this surah
+      // Insert all ayahs for this surah with conflict resolution
       const ayahsToInsert = surah.verses.map((verse: any) => ({
         surah_id: surah.id,
         ayah_number: verse.id,
@@ -46,7 +46,10 @@ serve(async (req) => {
 
       const { data: insertedAyahs, error: ayahError } = await supabase
         .from('ayahs')
-        .insert(ayahsToInsert)
+        .upsert(ayahsToInsert, { 
+          onConflict: 'surah_id,ayah_number',
+          ignoreDuplicates: false 
+        })
         .select('id, ayah_number')
 
       if (ayahError) {
@@ -70,7 +73,10 @@ serve(async (req) => {
       if (translationsToInsert.length > 0) {
         const { error: translationError } = await supabase
           .from('translations')
-          .insert(translationsToInsert)
+          .upsert(translationsToInsert, { 
+            onConflict: 'ayah_id,language_code',
+            ignoreDuplicates: false 
+          })
 
         if (translationError) {
           console.error(`Error inserting translations for surah ${surah.id}:`, translationError)

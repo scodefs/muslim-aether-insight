@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SurahSelector } from "@/components/quran/SurahSelector";
 import { VerseSelector } from "@/components/quran/VerseSelector";
 import { VerseDisplay } from "@/components/quran/VerseDisplay";
+import { QuranDataLoader } from "@/components/quran/QuranDataLoader";
 import { useSurahs } from "@/hooks/useQuranData";
 
 export default function Quran() {
@@ -20,11 +21,14 @@ export default function Quran() {
     <div className="flex-1 flex flex-col h-full">
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="p-4 space-y-4">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold tracking-tight">Quran</h1>
-            <p className="text-muted-foreground">
-              Read and reflect upon the holy Quran
-            </p>
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <h1 className="text-2xl font-bold tracking-tight">Quran</h1>
+              <p className="text-muted-foreground">
+                Read and reflect upon the holy Quran
+              </p>
+            </div>
+            <QuranDataLoader />
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
