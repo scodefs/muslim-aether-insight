@@ -154,7 +154,14 @@ export function BottomAudioPlayer({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={onRepeat}
+                onClick={() => {
+                  const audio = audioRef.current;
+                  if (audio) {
+                    audio.currentTime = 0;
+                    audio.play().then(() => setIsPlaying(true));
+                  }
+                  onRepeat();
+                }}
                 className="h-6 w-6 hover:scale-105 transition-transform"
               >
                 <RotateCcw className="h-3 w-3" />

@@ -5,7 +5,7 @@ import { Copy, Play } from "lucide-react";
 import { toast } from "sonner";
 import { useSurahWithAyahs, useSurahs, AyahWithTranslation } from "@/hooks/useQuranData";
 import { BottomAudioPlayer } from "./BottomAudioPlayer";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface VerseDisplayProps {
   surahId: number | null;
@@ -18,6 +18,7 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
   const { ayahs, loading, error } = useSurahWithAyahs(surahId, 'en', translatorName);
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number | null>(null);
   const [showBottomPlayer, setShowBottomPlayer] = useState(false);
+  const verseRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   
   const surah = surahId ? surahs.find(s => s.id === surahId) : null;
 
@@ -83,6 +84,16 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
     const nextIndex = currentPlayingIndex !== null ? currentPlayingIndex + 1 : 0;
     if (nextIndex < versesToDisplay.length) {
       setCurrentPlayingIndex(nextIndex);
+      // Scroll to the next verse
+      setTimeout(() => {
+        const verseElement = verseRefs.current[nextIndex];
+        if (verseElement) {
+          verseElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+        }
+      }, 100);
     } else {
       setCurrentPlayingIndex(null);
       setShowBottomPlayer(false);
@@ -122,15 +133,19 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
 
           <div className="space-y-4">
             {versesToDisplay.map((ayah, index) => (
-              <VerseCard
+              <div
                 key={ayah.id}
-                ayah={ayah}
-                surah={surah}
-                onCopy={copyToClipboard}
-                index={index}
-                isCurrentlyPlaying={currentPlayingIndex === index}
-                onPlay={() => handlePlayVerse(index)}
-              />
+                ref={el => verseRefs.current[index] = el}
+              >
+                <VerseCard
+                  ayah={ayah}
+                  surah={surah}
+                  onCopy={copyToClipboard}
+                  index={index}
+                  isCurrentlyPlaying={currentPlayingIndex === index}
+                  onPlay={() => handlePlayVerse(index)}
+                />
+              </div>
             ))}
           </div>
         </div>
