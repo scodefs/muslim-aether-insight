@@ -89,7 +89,7 @@ export type Database = {
           ayah_id: number
           created_at?: string | null
           id?: number
-          language_code: string
+          language_code?: string
           text_translated: string
           translator_name?: string | null
         }
