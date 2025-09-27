@@ -131,11 +131,97 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
   if (!currentVerse) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 pl-64 p-2 bg-background/95 backdrop-blur-sm border-t animate-fade-in">
-      <Card className="max-w-2xl mx-auto relative">
-        <div className="p-2">
-          {/* Compact layout */}
-          <div className="flex items-center gap-3">
+    <div className="fixed bottom-0 left-0 right-0 z-50 lg:pl-64 p-2 bg-background/95 backdrop-blur-sm border-t animate-fade-in">
+      <Card className="max-w-full lg:max-w-2xl mx-auto relative">
+        <div className="p-2 sm:p-3">
+          {/* Mobile layout - Stacked */}
+          <div className="lg:hidden space-y-2">
+            {/* Top row: Verse info and close button */}
+            <div className="flex items-center justify-between">
+              <div className="text-xs text-muted-foreground">
+                Verse {currentVerse.ayah_number}
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onClose}
+                className="h-6 w-6 opacity-40 hover:opacity-100 hover:scale-105 transition-all duration-200"
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            </div>
+
+            {/* Middle row: Control buttons */}
+            <div className="flex items-center justify-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onPrevious}
+                className="h-8 w-8 hover:scale-105 transition-transform"
+              >
+                <SkipBack className="h-4 w-4" />
+              </Button>
+
+              <Button
+                variant="default"
+                size="icon"
+                onClick={togglePlayPause}
+                className="h-10 w-10 hover:scale-105 transition-transform"
+              >
+                {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onNext}
+                className="h-8 w-8 hover:scale-105 transition-transform"
+              >
+                <SkipForward className="h-4 w-4" />
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  const audio = audioRef.current;
+                  if (audio) {
+                    audio.currentTime = 0;
+                    audio.play().then(() => setIsPlaying(true));
+                  }
+                  onRepeat();
+                }}
+                className="h-8 w-8 hover:scale-105 transition-transform"
+              >
+                <RotateCcw className="h-4 w-4" />
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleMute}
+                className="h-8 w-8 hover:scale-105 transition-transform"
+              >
+                <Volume2 className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Bottom row: Progress bar with times */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground min-w-fit">{formatTime(currentTime)}</span>
+              <Slider
+                value={[currentTime]}
+                max={duration || 100}
+                step={0.1}
+                onValueChange={handleSeek}
+                className="flex-1"
+              />
+              <span className="text-xs text-muted-foreground min-w-fit">{formatTime(duration)}</span>
+            </div>
+          </div>
+
+          {/* Desktop layout - Single row */}
+          <div className="hidden lg:flex items-center gap-3">
             {/* Verse info */}
             <div className="text-xs text-muted-foreground min-w-fit">
               Verse {currentVerse.ayah_number}
