@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import Chat from "./pages/Chat";
 import Dashboard from "./pages/Dashboard";
 import DailyGuidance from "./pages/DailyGuidance";
+import Quran from "./pages/Quran";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
                 <Routes>
                   <Route path="/" element={<Chat />} />
                   <Route path="/daily-guidance" element={<DailyGuidance />} />
+                  <Route path="/quran" element={<Quran />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
