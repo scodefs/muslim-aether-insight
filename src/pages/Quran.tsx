@@ -35,13 +35,16 @@ export default function Quran() {
             </div>
             
             {selectedSurah && currentSurah && (
-              <div className="w-full sm:w-auto">
-                <VerseSelector
-                  totalVerses={currentSurah.verses.length}
-                  selectedVerse={selectedVerse}
-                  onVerseChange={setSelectedVerse}
-                />
-              </div>
+              <>
+                <div className="hidden sm:block w-px h-6 bg-border"></div>
+                <div className="w-full sm:w-auto">
+                  <VerseSelector
+                    totalVerses={currentSurah.verses.length}
+                    selectedVerse={selectedVerse}
+                    onVerseChange={setSelectedVerse}
+                  />
+                </div>
+              </>
             )}
           </div>
         </div>
