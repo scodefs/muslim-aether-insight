@@ -141,18 +141,25 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
 
   return (
     <>
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-4 max-w-4xl mx-auto">
-          <div className="text-center space-y-2 mb-8">
-            <h2 className="text-2xl font-bold">
-              {surah.name_en} ({surah.name_ar})
+      <ScrollArea className="flex-1 p-3 sm:p-4 lg:p-6">
+        <div className="space-y-3 sm:space-y-4 max-w-4xl mx-auto">
+          {/* Surah Header - Mobile Optimized */}
+          <div className="text-center space-y-1 sm:space-y-2 mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight">
+              <span className="block sm:inline">{surah.name_en}</span>
+              <span className="block sm:inline text-lg sm:text-2xl lg:text-3xl mt-1 sm:mt-0 sm:ml-2">
+                ({surah.name_ar})
+              </span>
             </h2>
             {selectedVerse && (
-              <p className="text-muted-foreground">Verse {selectedVerse}</p>
+              <p className="text-sm sm:text-base text-muted-foreground">
+                Verse {selectedVerse}
+              </p>
             )}
           </div>
 
-          <div className="space-y-4">
+          {/* Verses Container */}
+          <div className="space-y-3 sm:space-y-4">
             {versesToDisplay.map((ayah, index) => (
               <div
                 key={ayah.id}
@@ -200,24 +207,28 @@ interface VerseCardProps {
 
 function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, isAudioPlaying, onPlay }: VerseCardProps) {
   return (
-    <Card className="hover:shadow-md transition-shadow animate-fade-in relative">
-      <CardContent className="p-6">
-        <div className="flex items-start gap-4">
-          <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-            <span className="text-sm font-medium text-primary">{ayah.ayah_number}</span>
+    <Card className="hover:shadow-md transition-shadow animate-fade-in relative overflow-hidden">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex items-start gap-3 sm:gap-4">
+          {/* Verse Number Badge */}
+          <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary/10 rounded-full flex items-center justify-center">
+            <span className="text-xs sm:text-sm font-medium text-primary">{ayah.ayah_number}</span>
           </div>
           
-          <div className="flex-1 space-y-3">
+          {/* Verse Content */}
+          <div className="flex-1 space-y-3 min-w-0">
+            {/* Arabic Text - Mobile Optimized */}
             <p 
-              className="leading-relaxed text-right text-xl font-medium"
+              className="leading-relaxed text-right text-lg sm:text-xl lg:text-2xl font-medium break-words"
               dir="rtl"
             >
               {ayah.text_ar}
             </p>
             
+            {/* Translation Section */}
             <div className="space-y-2">
               <p 
-                className="text-sm text-muted-foreground leading-relaxed"
+                className="text-sm sm:text-base text-muted-foreground leading-relaxed break-words"
                 dir="ltr"
               >
                 {ayah.translation?.text_translated}
@@ -232,12 +243,13 @@ function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, isAudioPlay
           </div>
         </div>
 
-        <div className="absolute bottom-3 right-3 flex items-center gap-1">
+        {/* Action Buttons - Mobile Optimized */}
+        <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 flex items-center gap-1">
           {ayah.audio_url && (
             <Button
               variant="ghost"
               size="icon"
-              className={`h-6 w-6 transition-all ${
+              className={`h-7 w-7 sm:h-8 sm:w-8 transition-all ${
                 isCurrentlyPlaying 
                   ? 'text-primary bg-primary/10' 
                   : 'opacity-60 hover:opacity-100'
@@ -245,21 +257,21 @@ function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, isAudioPlay
               onClick={onPlay}
             >
               {isCurrentlyPlaying && isAudioPlaying ? (
-                <Pause className="h-3 w-3" />
+                <Pause className="h-3 w-3 sm:h-4 sm:w-4" />
               ) : (
-                <Play className="h-3 w-3" />
+                <Play className="h-3 w-3 sm:h-4 sm:w-4" />
               )}
             </Button>
           )}
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 opacity-60 hover:opacity-100 transition-opacity"
+            className="h-7 w-7 sm:h-8 sm:w-8 opacity-60 hover:opacity-100 transition-opacity"
             onClick={() => {
               onCopy(`${ayah.text_ar}\n\n${ayah.ayah_number}. ${ayah.translation?.text_translated || ''}\n\n(${surah.name_en} ${surah.id}:${ayah.ayah_number})`);
             }}
           >
-            <Copy className="h-3 w-3" />
+            <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
           </Button>
         </div>
       </CardContent>

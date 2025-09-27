@@ -23,20 +23,24 @@ export default function Quran() {
 
   return (
     <div className="flex-1 flex flex-col h-full">
+      {/* Header Section - Mobile First */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="p-4 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold tracking-tight">Quran</h1>
-              <p className="text-muted-foreground">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+          {/* Title and Data Loaders */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="space-y-1 sm:space-y-2">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Quran</h1>
+              <p className="text-sm sm:text-base text-muted-foreground">
                 Read and reflect upon the holy Quran
               </p>
             </div>
-            <div className="flex gap-2">
+            
+            {/* Data Loaders - Hidden on mobile, visible on tablet+ */}
+            <div className="hidden md:flex gap-2">
               <Tabs defaultValue="text" className="w-auto">
                 <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="text">Text Data</TabsTrigger>
-                  <TabsTrigger value="audio">Audio Data</TabsTrigger>
+                  <TabsTrigger value="text" className="text-xs">Text Data</TabsTrigger>
+                  <TabsTrigger value="audio" className="text-xs">Audio Data</TabsTrigger>
                 </TabsList>
                 <TabsContent value="text" className="mt-2">
                   <QuranDataLoader />
@@ -48,8 +52,10 @@ export default function Quran() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-            <div className="flex-1 w-full sm:w-auto">
+          {/* Controls Section - Mobile First Layout */}
+          <div className="space-y-3 sm:space-y-0">
+            {/* Surah Selector - Full width on mobile */}
+            <div className="w-full">
               <SurahSelector
                 selectedSurah={selectedSurahId}
                 onSurahChange={handleSurahChange}
@@ -58,29 +64,50 @@ export default function Quran() {
               />
             </div>
             
+            {/* Secondary Controls - Stack on mobile, inline on larger screens */}
             {selectedSurahId && currentSurah && (
-              <>
-                <div className="hidden sm:block w-px h-6 bg-border"></div>
-                <div className="w-full sm:w-auto">
-                  <VerseSelector
-                    totalVerses={currentSurah.ayah_count}
-                    selectedVerse={selectedVerse}
-                    onVerseChange={setSelectedVerse}
-                  />
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 flex-1">
+                  <div className="w-full sm:w-auto sm:min-w-[140px]">
+                    <VerseSelector
+                      totalVerses={currentSurah.ayah_count}
+                      selectedVerse={selectedVerse}
+                      onVerseChange={setSelectedVerse}
+                    />
+                  </div>
+                  
+                  <div className="hidden sm:block w-px h-6 bg-border"></div>
+                  
+                  <div className="w-full sm:w-auto sm:min-w-[180px]">
+                    <TranslationSelector
+                      selectedTranslator={selectedTranslator}
+                      onTranslatorChange={setSelectedTranslator}
+                    />
+                  </div>
                 </div>
-                <div className="hidden sm:block w-px h-6 bg-border"></div>
-                <div className="w-full sm:w-auto">
-                  <TranslationSelector
-                    selectedTranslator={selectedTranslator}
-                    onTranslatorChange={setSelectedTranslator}
-                  />
-                </div>
-              </>
+              </div>
             )}
+          </div>
+
+          {/* Mobile Data Loaders - Only visible on mobile */}
+          <div className="md:hidden">
+            <Tabs defaultValue="text" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="text" className="text-xs">Text Data</TabsTrigger>
+                <TabsTrigger value="audio" className="text-xs">Audio Data</TabsTrigger>
+              </TabsList>
+              <TabsContent value="text" className="mt-3">
+                <QuranDataLoader />
+              </TabsContent>
+              <TabsContent value="audio" className="mt-3">
+                <AudioDataLoader />
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </div>
 
+      {/* Content Area */}
       <div className="flex-1 overflow-hidden">
         <VerseDisplay
           surahId={selectedSurahId}
