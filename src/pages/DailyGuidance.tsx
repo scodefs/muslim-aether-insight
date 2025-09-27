@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Heart, Star, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { BookOpen, Heart, Star, User, Copy } from "lucide-react";
 
 const dailyContent = {
   verse: {
@@ -24,6 +26,15 @@ const dailyContent = {
 };
 
 export default function DailyGuidance() {
+  const copyToClipboard = async (text: string, type: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success(`${type} copied to clipboard`);
+    } catch (err) {
+      toast.error("Failed to copy to clipboard");
+    }
+  };
+
   return (
     <div className="flex-1 space-y-6 p-6">
       <div className="space-y-2">
@@ -35,7 +46,7 @@ export default function DailyGuidance() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Verse of the Day */}
-        <Card className="hover:shadow-lg transition-shadow animate-fade-in">
+        <Card className="hover:shadow-lg transition-shadow animate-fade-in relative">
           <CardHeader className="flex flex-row items-center gap-3">
             <div className="p-2 bg-primary/10 rounded-lg">
               <BookOpen className="h-5 w-5 text-primary" />
@@ -54,11 +65,19 @@ export default function DailyGuidance() {
                 "{dailyContent.verse.english}"
               </p>
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute bottom-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
+              onClick={() => copyToClipboard(dailyContent.verse.arabic, "Verse")}
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
           </CardContent>
         </Card>
 
         {/* Hadith of the Day */}
-        <Card className="hover:shadow-lg transition-shadow animate-fade-in">
+        <Card className="hover:shadow-lg transition-shadow animate-fade-in relative">
           <CardHeader className="flex flex-row items-center gap-3">
             <div className="p-2 bg-accent/10 rounded-lg">
               <Star className="h-5 w-5 text-accent" />
@@ -77,11 +96,19 @@ export default function DailyGuidance() {
                 "{dailyContent.hadith.english}"
               </p>
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute bottom-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
+              onClick={() => copyToClipboard(dailyContent.hadith.arabic, "Hadith")}
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
           </CardContent>
         </Card>
 
         {/* Dua of the Day */}
-        <Card className="hover:shadow-lg transition-shadow animate-fade-in">
+        <Card className="hover:shadow-lg transition-shadow animate-fade-in relative">
           <CardHeader className="flex flex-row items-center gap-3">
             <div className="p-2 bg-chart-2/10 rounded-lg">
               <Heart className="h-5 w-5 text-chart-2" />
@@ -100,6 +127,14 @@ export default function DailyGuidance() {
                 "{dailyContent.dua.english}"
               </p>
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute bottom-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
+              onClick={() => copyToClipboard(dailyContent.dua.arabic, "Dua")}
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
           </CardContent>
         </Card>
 
