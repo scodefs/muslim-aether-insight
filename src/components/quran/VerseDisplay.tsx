@@ -103,7 +103,7 @@ function VerseCard({ verse, onCopy }: VerseCardProps) {
           variant="ghost"
           size="icon"
           className="absolute top-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
-          onClick={() => onCopy(`Verse ${verse.number}\n\n${verse.arabic}\n\n${verse.english}`)}
+          onClick={() => onCopy(`${verse.arabic}\n\n${verse.number}. ${verse.english}`)}
         >
           <Copy className="h-4 w-4" />
         </Button>
