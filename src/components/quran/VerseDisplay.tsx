@@ -1,11 +1,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Copy, Play } from "lucide-react";
 import { toast } from "sonner";
 import { useSurahWithAyahs, useSurahs, AyahWithTranslation } from "@/hooks/useQuranData";
-import { AudioPlayer } from "./AudioPlayer";
-import { useState, useRef } from "react";
+import { BottomAudioPlayer } from "./BottomAudioPlayer";
+import { useState } from "react";
 
 interface VerseDisplayProps {
   surahId: number | null;
@@ -17,6 +17,7 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
   const { surahs } = useSurahs();
   const { ayahs, loading, error } = useSurahWithAyahs(surahId, 'en', translatorName);
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number | null>(null);
+  const [showBottomPlayer, setShowBottomPlayer] = useState(false);
   
   const surah = surahId ? surahs.find(s => s.id === surahId) : null;
 
@@ -73,43 +74,78 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
     ? ayahs.filter(ayah => ayah.ayah_number === selectedVerse)
     : ayahs;
 
-  const handleVerseEnded = (currentIndex: number) => {
-    const nextIndex = currentIndex + 1;
+  const handlePlayVerse = (index: number) => {
+    setCurrentPlayingIndex(index);
+    setShowBottomPlayer(true);
+  };
+
+  const handleNext = () => {
+    const nextIndex = currentPlayingIndex !== null ? currentPlayingIndex + 1 : 0;
     if (nextIndex < versesToDisplay.length) {
       setCurrentPlayingIndex(nextIndex);
     } else {
       setCurrentPlayingIndex(null);
+      setShowBottomPlayer(false);
     }
   };
 
-  return (
-    <ScrollArea className="flex-1 p-4">
-      <div className="space-y-4 max-w-4xl mx-auto">
-        <div className="text-center space-y-2 mb-8">
-          <h2 className="text-2xl font-bold">
-            {surah.name_en} ({surah.name_ar})
-          </h2>
-          {selectedVerse && (
-            <p className="text-muted-foreground">Verse {selectedVerse}</p>
-          )}
-        </div>
+  const handlePrevious = () => {
+    const prevIndex = currentPlayingIndex !== null ? currentPlayingIndex - 1 : 0;
+    if (prevIndex >= 0) {
+      setCurrentPlayingIndex(prevIndex);
+    }
+  };
 
-        <div className="space-y-4">
-          {versesToDisplay.map((ayah, index) => (
-            <VerseCard
-              key={ayah.id}
-              ayah={ayah}
-              surah={surah}
-              onCopy={copyToClipboard}
-              index={index}
-              isCurrentlyPlaying={currentPlayingIndex === index}
-              onVerseEnded={handleVerseEnded}
-              onPlayStart={() => setCurrentPlayingIndex(index)}
-            />
-          ))}
+  const handleRepeat = () => {
+    // Keep the current index, the bottom player will handle restarting
+  };
+
+  const handleClosePlayer = () => {
+    setShowBottomPlayer(false);
+    setCurrentPlayingIndex(null);
+  };
+
+  const currentVerse = currentPlayingIndex !== null ? versesToDisplay[currentPlayingIndex] : null;
+
+  return (
+    <>
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-4 max-w-4xl mx-auto">
+          <div className="text-center space-y-2 mb-8">
+            <h2 className="text-2xl font-bold">
+              {surah.name_en} ({surah.name_ar})
+            </h2>
+            {selectedVerse && (
+              <p className="text-muted-foreground">Verse {selectedVerse}</p>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            {versesToDisplay.map((ayah, index) => (
+              <VerseCard
+                key={ayah.id}
+                ayah={ayah}
+                surah={surah}
+                onCopy={copyToClipboard}
+                index={index}
+                isCurrentlyPlaying={currentPlayingIndex === index}
+                onPlay={() => handlePlayVerse(index)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </ScrollArea>
+      </ScrollArea>
+
+      {showBottomPlayer && (
+        <BottomAudioPlayer
+          currentVerse={currentVerse}
+          onNext={handleNext}
+          onPrevious={handlePrevious}
+          onRepeat={handleRepeat}
+          onClose={handleClosePlayer}
+        />
+      )}
+    </>
   );
 }
 
@@ -119,11 +155,10 @@ interface VerseCardProps {
   onCopy: (text: string) => void;
   index: number;
   isCurrentlyPlaying: boolean;
-  onVerseEnded: (index: number) => void;
-  onPlayStart: () => void;
+  onPlay: () => void;
 }
 
-function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, onVerseEnded, onPlayStart }: VerseCardProps) {
+function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, onPlay }: VerseCardProps) {
   return (
     <Card className="hover:shadow-md transition-shadow animate-fade-in relative">
       <CardContent className="p-6">
@@ -159,12 +194,18 @@ function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, onVerseEnde
 
         <div className="absolute bottom-3 right-3 flex items-center gap-1">
           {ayah.audio_url && (
-            <AudioPlayer
-              audioUrl={ayah.audio_url}
-              className="max-w-xs"
-              autoPlay={isCurrentlyPlaying}
-              onEnded={() => onVerseEnded(index)}
-            />
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`h-6 w-6 transition-all ${
+                isCurrentlyPlaying 
+                  ? 'text-primary bg-primary/10' 
+                  : 'opacity-60 hover:opacity-100'
+              }`}
+              onClick={onPlay}
+            >
+              <Play className="h-3 w-3" />
+            </Button>
           )}
           <Button
             variant="ghost"
