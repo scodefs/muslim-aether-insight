@@ -42,7 +42,7 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0 border-border bg-popover shadow-sm">
+      <PopoverContent className="w-96 p-0 border-border bg-popover shadow-sm" align="start">
         <Command>
           <CommandInput placeholder="Search Surah..." className="border-none focus:ring-0" />
           <CommandList>
