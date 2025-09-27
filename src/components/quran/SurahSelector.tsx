@@ -34,7 +34,7 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
           variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between hover:bg-accent/50"
+          className="w-full justify-between hover:bg-muted/30 border-none focus:ring-0 focus:ring-offset-0 text-foreground"
         >
           {selectedSurah
             ? `${selectedSurahData?.name} (${selectedSurahData?.arabicName})`
@@ -42,9 +42,9 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0 shadow-lg">
+      <PopoverContent className="w-full p-0 border-border bg-popover shadow-sm">
         <Command>
-          <CommandInput placeholder="Search Surah..." />
+          <CommandInput placeholder="Search Surah..." className="border-none focus:ring-0" />
           <CommandList>
             <CommandEmpty>No Surah found.</CommandEmpty>
             <CommandGroup>
@@ -56,15 +56,16 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
                     onSurahChange(surah.id);
                     setOpen(false);
                   }}
+                  className="hover:bg-muted/30 data-[selected=true]:bg-muted/50"
                 >
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
+                      "mr-2 h-4 w-4 text-muted-foreground",
                       selectedSurah === surah.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   <div className="flex flex-col">
-                    <span className="font-medium">{surah.name}</span>
+                    <span className="font-medium text-foreground">{surah.name}</span>
                     <span className="text-sm text-muted-foreground">{surah.arabicName}</span>
                   </div>
                 </CommandItem>
