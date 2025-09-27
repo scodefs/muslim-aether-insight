@@ -52,37 +52,39 @@ export default function Quran() {
             </div>
           </div>
 
-          {/* Controls Section - Mobile First Layout */}
+          {/* Controls Section - All selectors in one horizontal line */}
           <div className="space-y-3 sm:space-y-0">
-            {/* Surah Selector - Full width on mobile */}
-            <div className="w-full">
-              <SurahSelector
-                selectedSurah={selectedSurahId}
-                onSurahChange={handleSurahChange}
-                surahs={surahs}
-                loading={loading}
-              />
-            </div>
-            
-            {/* Secondary Controls - Horizontal layout */}
-            {selectedSurahId && currentSurah && (
-              <div className="flex flex-row gap-3">
-                <div className="flex-1">
-                  <VerseSelector
-                    totalVerses={currentSurah.ayah_count}
-                    selectedVerse={selectedVerse}
-                    onVerseChange={setSelectedVerse}
-                  />
-                </div>
-                
-                <div className="flex-1">
-                  <TranslationSelector
-                    selectedTranslator={selectedTranslator}
-                    onTranslatorChange={setSelectedTranslator}
-                  />
-                </div>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              {/* Surah Selector */}
+              <div className="flex-1 sm:min-w-[200px]">
+                <SurahSelector
+                  selectedSurah={selectedSurahId}
+                  onSurahChange={handleSurahChange}
+                  surahs={surahs}
+                  loading={loading}
+                />
               </div>
-            )}
+              
+              {/* Verse and Translation Selectors - only show when surah is selected */}
+              {selectedSurahId && currentSurah && (
+                <>
+                  <div className="flex-1 sm:min-w-[140px]">
+                    <VerseSelector
+                      totalVerses={currentSurah.ayah_count}
+                      selectedVerse={selectedVerse}
+                      onVerseChange={setSelectedVerse}
+                    />
+                  </div>
+                  
+                  <div className="flex-1 sm:min-w-[180px]">
+                    <TranslationSelector
+                      selectedTranslator={selectedTranslator}
+                      onTranslatorChange={setSelectedTranslator}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Mobile Data Loaders - Only visible on mobile */}
