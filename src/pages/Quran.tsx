@@ -64,10 +64,10 @@ export default function Quran() {
               />
             </div>
             
-            {/* Secondary Controls - Always stacked vertically */}
+            {/* Secondary Controls - Horizontal layout */}
             {selectedSurahId && currentSurah && (
-              <div className="flex flex-col gap-3">
-                <div className="w-full">
+              <div className="flex flex-row gap-3">
+                <div className="flex-1">
                   <VerseSelector
                     totalVerses={currentSurah.ayah_count}
                     selectedVerse={selectedVerse}
@@ -75,7 +75,7 @@ export default function Quran() {
                   />
                 </div>
                 
-                <div className="w-full">
+                <div className="flex-1">
                   <TranslationSelector
                     selectedTranslator={selectedTranslator}
                     onTranslatorChange={setSelectedTranslator}
