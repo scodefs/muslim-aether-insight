@@ -69,7 +69,7 @@ export default function DailyGuidance() {
               variant="ghost"
               size="icon"
               className="absolute bottom-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
-              onClick={() => copyToClipboard(`${dailyContent.verse.arabic}\n\n"${dailyContent.verse.english}" - ${dailyContent.verse.reference}`, "Verse")}
+              onClick={() => copyToClipboard(`${dailyContent.verse.arabic}\n\n"${dailyContent.verse.english}"\n\n(${dailyContent.verse.reference})`, "Verse")}
             >
               <Copy className="h-4 w-4" />
             </Button>
@@ -100,7 +100,7 @@ export default function DailyGuidance() {
               variant="ghost"
               size="icon"
               className="absolute bottom-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
-              onClick={() => copyToClipboard(`${dailyContent.hadith.arabic}\n\n"${dailyContent.hadith.english}" - ${dailyContent.hadith.reference}`, "Hadith")}
+              onClick={() => copyToClipboard(`${dailyContent.hadith.arabic}\n\n"${dailyContent.hadith.english}"\n\n(${dailyContent.hadith.reference})`, "Hadith")}
             >
               <Copy className="h-4 w-4" />
             </Button>
