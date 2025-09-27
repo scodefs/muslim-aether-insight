@@ -15,7 +15,7 @@ export const quranData = {
   surahs: [
     {
       id: "al-fatihah",
-      name: "Al-Fātiḥah",
+      name: "Al-Fatihah",
       arabicName: "الفاتحة",
       verses: [
         {
@@ -57,7 +57,7 @@ export const quranData = {
     },
     {
       id: "an-nas",
-      name: "An-Nās",
+      name: "An-Nas",
       arabicName: "الناس",
       verses: [
         {
@@ -126,7 +126,7 @@ export const quranData = {
     },
     {
       id: "al-ikhlas",
-      name: "Al-Ikhlāṣ",
+      name: "Al-Ikhlas",
       arabicName: "الإخلاص",
       verses: [
         {
