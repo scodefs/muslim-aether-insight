@@ -59,6 +59,7 @@ export function VerseDisplay({ surah, selectedVerse }: VerseDisplayProps) {
             <VerseCard
               key={verse.number}
               verse={verse}
+              surah={surah}
               onCopy={copyToClipboard}
             />
           ))}
@@ -70,10 +71,11 @@ export function VerseDisplay({ surah, selectedVerse }: VerseDisplayProps) {
 
 interface VerseCardProps {
   verse: Verse;
+  surah: Surah;
   onCopy: (text: string) => void;
 }
 
-function VerseCard({ verse, onCopy }: VerseCardProps) {
+function VerseCard({ verse, surah, onCopy }: VerseCardProps) {
   return (
     <Card className="hover:shadow-md transition-shadow animate-fade-in relative">
       <CardContent className="p-6">
@@ -103,7 +105,7 @@ function VerseCard({ verse, onCopy }: VerseCardProps) {
           variant="ghost"
           size="icon"
           className="absolute top-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
-          onClick={() => onCopy(`${verse.arabic}\n\n"${verse.number}. ${verse.english}"`)}
+          onClick={() => onCopy(`${verse.arabic}\n\n"${verse.number}. ${verse.english}"\n\n(${surah.name} ${verse.number})`)}
         >
           <Copy className="h-4 w-4" />
         </Button>
