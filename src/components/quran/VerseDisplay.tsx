@@ -8,9 +8,10 @@ import { Surah, Verse } from "@/data/quranData";
 interface VerseDisplayProps {
   surah: Surah | null;
   selectedVerse: number | null;
+  language: "english" | "arabic";
 }
 
-export function VerseDisplay({ surah, selectedVerse }: VerseDisplayProps) {
+export function VerseDisplay({ surah, selectedVerse, language }: VerseDisplayProps) {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -59,6 +60,7 @@ export function VerseDisplay({ surah, selectedVerse }: VerseDisplayProps) {
             <VerseCard
               key={verse.number}
               verse={verse}
+              language={language}
               onCopy={copyToClipboard}
             />
           ))}
@@ -70,10 +72,14 @@ export function VerseDisplay({ surah, selectedVerse }: VerseDisplayProps) {
 
 interface VerseCardProps {
   verse: Verse;
+  language: "english" | "arabic";
   onCopy: (text: string) => void;
 }
 
-function VerseCard({ verse, onCopy }: VerseCardProps) {
+function VerseCard({ verse, language, onCopy }: VerseCardProps) {
+  const displayText = language === "arabic" ? verse.arabic : verse.english;
+  const isArabic = language === "arabic";
+
   return (
     <Card className="hover:shadow-md transition-shadow animate-fade-in relative">
       <CardContent className="p-6">
@@ -83,16 +89,25 @@ function VerseCard({ verse, onCopy }: VerseCardProps) {
           </div>
           
           <div className="flex-1 space-y-3">
-            <p className="leading-relaxed text-base">
-              {verse.english}
+            <p 
+              className={`leading-relaxed ${
+                isArabic 
+                  ? "text-right text-xl font-medium" 
+                  : "text-base"
+              }`}
+              dir={isArabic ? "rtl" : "ltr"}
+            >
+              {displayText}
             </p>
             
-            <p 
-              className="text-sm text-muted-foreground leading-relaxed text-right text-lg"
-              dir="rtl"
-            >
-              {verse.arabic}
-            </p>
+            {!isArabic && (
+              <p 
+                className="text-sm text-muted-foreground leading-relaxed text-right text-lg"
+                dir="rtl"
+              >
+                {verse.arabic}
+              </p>
+            )}
           </div>
         </div>
 
@@ -100,7 +115,7 @@ function VerseCard({ verse, onCopy }: VerseCardProps) {
           variant="ghost"
           size="icon"
           className="absolute top-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
-          onClick={() => onCopy(verse.english)}
+          onClick={() => onCopy(displayText)}
         >
           <Copy className="h-4 w-4" />
         </Button>
