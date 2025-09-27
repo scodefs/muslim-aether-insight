@@ -11,6 +11,7 @@ interface BottomAudioPlayerProps {
   onPrevious: () => void;
   onRepeat: () => void;
   onClose: () => void;
+  onPlayingStateChange?: (isPlaying: boolean) => void;
 }
 
 export function BottomAudioPlayer({
@@ -18,7 +19,8 @@ export function BottomAudioPlayer({
   onNext,
   onPrevious,
   onRepeat,
-  onClose
+  onClose,
+  onPlayingStateChange
 }: BottomAudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -33,9 +35,12 @@ export function BottomAudioPlayer({
       const audio = audioRef.current;
       audio.src = currentVerse.audio_url;
       audio.load();
-      audio.play().then(() => setIsPlaying(true));
+      audio.play().then(() => {
+        setIsPlaying(true);
+        onPlayingStateChange?.(true);
+      });
     }
-  }, [currentVerse]);
+  }, [currentVerse, onPlayingStateChange]);
 
   // Audio event listeners
   useEffect(() => {
@@ -46,6 +51,7 @@ export function BottomAudioPlayer({
     const handleLoadedMetadata = () => setDuration(audio.duration);
     const handleEnded = () => {
       setIsPlaying(false);
+      onPlayingStateChange?.(false);
       onNext();
     };
 
@@ -67,8 +73,12 @@ export function BottomAudioPlayer({
     if (isPlaying) {
       audio.pause();
       setIsPlaying(false);
+      onPlayingStateChange?.(false);
     } else {
-      audio.play().then(() => setIsPlaying(true));
+      audio.play().then(() => {
+        setIsPlaying(true);
+        onPlayingStateChange?.(true);
+      });
     }
   };
 

@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Copy, Play } from "lucide-react";
+import { Copy, Play, Pause } from "lucide-react";
 import { toast } from "sonner";
 import { useSurahWithAyahs, useSurahs, AyahWithTranslation } from "@/hooks/useQuranData";
 import { BottomAudioPlayer } from "./BottomAudioPlayer";
@@ -18,6 +18,7 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
   const { ayahs, loading, error } = useSurahWithAyahs(surahId, 'en', translatorName);
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number | null>(null);
   const [showBottomPlayer, setShowBottomPlayer] = useState(false);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const verseRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   
   const surah = surahId ? surahs.find(s => s.id === surahId) : null;
@@ -76,8 +77,15 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
     : ayahs;
 
   const handlePlayVerse = (index: number) => {
-    setCurrentPlayingIndex(index);
-    setShowBottomPlayer(true);
+    if (currentPlayingIndex === index && isAudioPlaying) {
+      // If the same verse is playing, pause it
+      setIsAudioPlaying(false);
+    } else {
+      // Otherwise play this verse
+      setCurrentPlayingIndex(index);
+      setShowBottomPlayer(true);
+      setIsAudioPlaying(true);
+    }
   };
 
   const handleNext = () => {
@@ -153,6 +161,7 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
                   onCopy={copyToClipboard}
                   index={index}
                   isCurrentlyPlaying={currentPlayingIndex === index}
+                  isAudioPlaying={isAudioPlaying}
                   onPlay={() => handlePlayVerse(index)}
                 />
               </div>
@@ -168,6 +177,7 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
           onPrevious={handlePrevious}
           onRepeat={handleRepeat}
           onClose={handleClosePlayer}
+          onPlayingStateChange={setIsAudioPlaying}
         />
       )}
     </>
@@ -180,10 +190,11 @@ interface VerseCardProps {
   onCopy: (text: string) => void;
   index: number;
   isCurrentlyPlaying: boolean;
+  isAudioPlaying: boolean;
   onPlay: () => void;
 }
 
-function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, onPlay }: VerseCardProps) {
+function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, isAudioPlaying, onPlay }: VerseCardProps) {
   return (
     <Card className="hover:shadow-md transition-shadow animate-fade-in relative">
       <CardContent className="p-6">
@@ -229,7 +240,11 @@ function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, onPlay }: V
               }`}
               onClick={onPlay}
             >
-              <Play className="h-3 w-3" />
+              {isCurrentlyPlaying && isAudioPlaying ? (
+                <Pause className="h-3 w-3" />
+              ) : (
+                <Play className="h-3 w-3" />
+              )}
             </Button>
           )}
           <Button
