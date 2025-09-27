@@ -31,10 +31,10 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-full justify-between hover:bg-accent/50 border-none rounded-none"
         >
           {selectedSurah
             ? `${selectedSurahData?.name} (${selectedSurahData?.arabicName})`
@@ -42,7 +42,7 @@ export function SurahSelector({ selectedSurah, onSurahChange }: SurahSelectorPro
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
+      <PopoverContent className="w-full p-0 border-none rounded-none shadow-lg">
         <Command>
           <CommandInput placeholder="Search Surah..." />
           <CommandList>

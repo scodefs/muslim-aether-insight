@@ -5,7 +5,7 @@ import { VerseDisplay } from "@/components/quran/VerseDisplay";
 import { quranData } from "@/data/quranData";
 
 export default function Quran() {
-  const [selectedSurah, setSelectedSurah] = useState<string>("");
+  const [selectedSurah, setSelectedSurah] = useState<string>("1");
   const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
 
   const handleSurahChange = (surahId: string) => {
