@@ -40,11 +40,11 @@ const App = () => {
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={isMobile ? 100 : 80} minSize={50}>
-                  <div className="flex-1 flex flex-col h-full">
-                    <header className="h-12 flex items-center border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                  <div className="flex flex-col h-full w-full">
+                    <header className="h-12 flex items-center border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
                       <SidebarTrigger className="ml-4" />
                     </header>
-                    <main className="flex-1 overflow-hidden">
+                    <main className="flex-1 overflow-auto w-full">
                       <Routes>
                         <Route path="/" element={<Chat />} />
                         <Route path="/daily-guidance" element={<DailyGuidance />} />
