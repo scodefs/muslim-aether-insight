@@ -24,16 +24,18 @@ serve(async (req) => {
     const arabicResponse = await fetch('https://raw.githubusercontent.com/risan/quran-json/main/dist/quran.json')
     const arabicData = await arabicResponse.json()
     
-    // Fetch English translations and audio data
-    const [sahihResponse, hilaliResponse, audioResponse] = await Promise.all([
+    // Fetch English translations and audio data from both reciters
+    const [sahihResponse, hilaliResponse, sudaisResponse, afasyResponse] = await Promise.all([
       fetch('https://api.alquran.cloud/v1/quran/en.sahih'),
       fetch('https://api.alquran.cloud/v1/quran/en.hilali'),
-      fetch('https://api.alquran.cloud/v1/quran/ar.abdurrahmaansudais') // Abdul Rahman Al-Sudais audio
+      fetch('https://api.alquran.cloud/v1/quran/ar.abdurrahmaansudais'), // Abdul Rahman Al-Sudais audio
+      fetch('https://api.alquran.cloud/v1/quran/ar.alafasy') // Mishari Rashid Al-Afasy audio
     ])
     
     const sahihData = await sahihResponse.json()
     const hilaliData = await hilaliResponse.json()
-    const audioData = await audioResponse.json()
+    const sudaisData = await sudaisResponse.json()
+    const afasyData = await afasyResponse.json()
 
     console.log(`Processing ${arabicData.length} surahs...`)
 
@@ -42,25 +44,37 @@ serve(async (req) => {
       const surah = arabicData[surahIndex]
       const sahihSurah = sahihData.data.surahs[surahIndex]
       const hilaliSurah = hilaliData.data.surahs[surahIndex]
-      const audioSurah = audioData.data.surahs[surahIndex]
+      const sudaisSurah = sudaisData.data.surahs[surahIndex]
+      const afasySurah = afasyData.data.surahs[surahIndex]
       
       console.log(`Processing Surah ${surah.id}: ${surah.name}`)
 
-      // Insert all ayahs for this surah with conflict resolution
-      const ayahsToInsert = surah.verses.map((verse: any, index: number) => ({
+      // Insert ayahs for both reciters
+      const sudaisAyahs = surah.verses.map((verse: any, index: number) => ({
         surah_id: surah.id,
         ayah_number: verse.id,
         text_ar: verse.text,
-        audio_url: audioSurah?.ayahs?.[index]?.audio || null
+        audio_url: sudaisSurah?.ayahs?.[index]?.audio || null,
+        reciter_id: 1 // Al-Sudais
       }))
+
+      const afasyAyahs = surah.verses.map((verse: any, index: number) => ({
+        surah_id: surah.id,
+        ayah_number: verse.id,
+        text_ar: verse.text,
+        audio_url: afasySurah?.ayahs?.[index]?.audio || null,
+        reciter_id: 2 // Al-Afasy
+      }))
+
+      const allAyahs = [...sudaisAyahs, ...afasyAyahs]
 
       const { data: insertedAyahs, error: ayahError } = await supabase
         .from('ayahs')
-        .upsert(ayahsToInsert, { 
-          onConflict: 'surah_id,ayah_number',
+        .upsert(allAyahs, { 
+          onConflict: 'surah_id,ayah_number,reciter_id',
           ignoreDuplicates: false 
         })
-        .select('id, ayah_number')
+        .select('id, ayah_number, reciter_id')
 
       if (ayahError) {
         console.error(`Error inserting ayahs for surah ${surah.id}:`, ayahError)
@@ -70,10 +84,12 @@ serve(async (req) => {
       console.log(`Inserted ${insertedAyahs.length} ayahs for Surah ${surah.id}`)
 
       // Insert translations for each ayah - both Sahih International and Hilali & Khan
+      // Only create translations for unique ayah numbers (both reciters share same text)
+      const uniqueAyahs = insertedAyahs.filter((ayah: any) => ayah.reciter_id === 1) // Use Al-Sudais for translations
       const allTranslationsToInsert = []
       
       // Sahih International translations
-      const sahihTranslations = insertedAyahs.map((ayah: any, index: number) => {
+      const sahihTranslations = uniqueAyahs.map((ayah: any, index: number) => {
         const sahihVerse = sahihSurah?.ayahs?.[index]
         return {
           ayah_id: ayah.id,
@@ -84,7 +100,7 @@ serve(async (req) => {
       }).filter(t => t.text_translated)
       
       // Hilali & Khan translations  
-      const hilaliTranslations = insertedAyahs.map((ayah: any, index: number) => {
+      const hilaliTranslations = uniqueAyahs.map((ayah: any, index: number) => {
         const hilaliVerse = hilaliSurah?.ayahs?.[index]
         return {
           ayah_id: ayah.id,

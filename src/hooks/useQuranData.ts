@@ -25,6 +25,15 @@ export interface Translation {
   translator_name?: string;
 }
 
+export interface Reciter {
+  id: number;
+  name: string;
+  name_ar: string | null;
+  identifier: string;
+  language_code: string;
+  created_at: string | null;
+}
+
 export interface AyahWithTranslation extends Ayah {
   translation?: Translation;
 }
@@ -57,7 +66,7 @@ export function useSurahs() {
   return { surahs, loading, error };
 }
 
-export function useSurahWithAyahs(surahId: number | null, languageCode: string = 'en', translatorName: string = 'Hilali & Khan') {
+export function useSurahWithAyahs(surahId: number | null, languageCode: string = 'en', translatorName: string = 'Hilali & Khan', reciterId: number = 1) {
   const [ayahs, setAyahs] = useState<AyahWithTranslation[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -113,7 +122,31 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
     }
 
     fetchAyahs();
-  }, [surahId, languageCode, translatorName]);
+  }, [surahId, languageCode, translatorName, reciterId]);
 
   return { ayahs, loading, error };
+}
+
+export function useReciters() {
+  // Hardcoded reciters for now
+  const reciters: Reciter[] = [
+    {
+      id: 1,
+      name: "Abdul Rahman Al-Sudais",
+      name_ar: "عبد الرحمن السديس",
+      identifier: "abdurrahmaansudais",
+      language_code: "ar",
+      created_at: null
+    },
+    {
+      id: 2,
+      name: "Mishari Rashid Al-Afasy",
+      name_ar: "مشاري راشد العفاسي",
+      identifier: "alafasy",
+      language_code: "ar",
+      created_at: null
+    }
+  ];
+
+  return { reciters, loading: false, error: null };
 }
