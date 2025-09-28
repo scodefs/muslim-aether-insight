@@ -5,7 +5,6 @@ import { VerseDisplay } from "@/components/quran/VerseDisplay";
 import { QuranDataLoader } from "@/components/quran/QuranDataLoader";
 import { AudioDataLoader } from "@/components/quran/AudioDataLoader";
 import { TranslationSelector } from "@/components/quran/TranslationSelector";
-import { ReciterSelector } from "@/components/quran/ReciterSelector";
 import { useSurahs } from "@/hooks/useQuranData";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -13,7 +12,6 @@ export default function Quran() {
   const [selectedSurahId, setSelectedSurahId] = useState<number | null>(1); // Default to Al-Fatihah
   const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
   const [selectedTranslator, setSelectedTranslator] = useState<string>("Hilali & Khan");
-  const [selectedReciter, setSelectedReciter] = useState<number>(1); // Default to Al-Sudais
   const { surahs, loading } = useSurahs();
 
   const handleSurahChange = (surahId: number) => {
@@ -67,7 +65,7 @@ export default function Quran() {
                 />
               </div>
               
-              {/* Verse, Translation, and Reciter Selectors - only show when surah is selected */}
+              {/* Verse and Translation Selectors - only show when surah is selected */}
               {selectedSurahId && currentSurah && (
                 <>
                   <div className="flex-1 sm:min-w-[140px]">
@@ -82,13 +80,6 @@ export default function Quran() {
                     <TranslationSelector
                       selectedTranslator={selectedTranslator}
                       onTranslatorChange={setSelectedTranslator}
-                    />
-                  </div>
-
-                  <div className="flex-1 sm:min-w-[160px]">
-                    <ReciterSelector
-                      selectedReciter={selectedReciter}
-                      onReciterChange={setSelectedReciter}
                     />
                   </div>
                 </>
@@ -120,7 +111,6 @@ export default function Quran() {
           surahId={selectedSurahId}
           selectedVerse={selectedVerse}
           translatorName={selectedTranslator}
-          reciterId={selectedReciter}
         />
       </div>
     </div>

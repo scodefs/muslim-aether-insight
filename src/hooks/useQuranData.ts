@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import type { Tables } from '@/integrations/supabase/types';
 
 export interface Surah {
   id: number;
@@ -25,8 +24,6 @@ export interface Translation {
   text_translated: string;
   translator_name?: string;
 }
-
-type Reciter = Tables<'reciters'>;
 
 export interface AyahWithTranslation extends Ayah {
   translation?: Translation;
@@ -60,7 +57,7 @@ export function useSurahs() {
   return { surahs, loading, error };
 }
 
-export function useSurahWithAyahs(surahId: number | null, languageCode: string = 'en', translatorName: string = 'Hilali & Khan', reciterId: number = 1) {
+export function useSurahWithAyahs(surahId: number | null, languageCode: string = 'en', translatorName: string = 'Hilali & Khan') {
   const [ayahs, setAyahs] = useState<AyahWithTranslation[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +83,6 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
             )
           `)
           .eq('surah_id', surahId)
-          .eq('reciter_id', reciterId)
           .eq('translations.language_code', languageCode)
           .eq('translations.translator_name', translatorName)
           .order('ayah_number');
@@ -117,35 +113,7 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
     }
 
     fetchAyahs();
-  }, [surahId, languageCode, translatorName, reciterId]);
+  }, [surahId, languageCode, translatorName]);
 
   return { ayahs, loading, error };
-}
-
-export function useReciters() {
-  const [reciters, setReciters] = useState<Reciter[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchReciters() {
-      try {
-        const { data, error } = await supabase
-          .from('reciters')
-          .select('*')
-          .order('id');
-
-        if (error) throw error;
-        setReciters(data || []);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch reciters');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchReciters();
-  }, []);
-
-  return { reciters, loading, error };
 }

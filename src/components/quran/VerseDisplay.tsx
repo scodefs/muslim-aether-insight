@@ -11,12 +11,11 @@ interface VerseDisplayProps {
   surahId: number | null;
   selectedVerse: number | null;
   translatorName?: string;
-  reciterId?: number;
 }
 
-export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali & Khan", reciterId = 1 }: VerseDisplayProps) {
+export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali & Khan" }: VerseDisplayProps) {
   const { surahs } = useSurahs();
-  const { ayahs, loading, error } = useSurahWithAyahs(surahId, 'en', translatorName, reciterId);
+  const { ayahs, loading, error } = useSurahWithAyahs(surahId, 'en', translatorName);
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number | null>(null);
   const [showBottomPlayer, setShowBottomPlayer] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
