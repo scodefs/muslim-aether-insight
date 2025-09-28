@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { BookOpen, Heart, Star, User, Copy } from "lucide-react";
+import { BookOpen, Heart, Star, User, Copy, Loader2 } from "lucide-react";
+import { useDailyVerse } from "@/hooks/useDailyVerse";
 
 const dailyContent = {
   verse: {
@@ -26,6 +27,8 @@ const dailyContent = {
 };
 
 export default function DailyGuidance() {
+  const { verse: dailyVerse, loading: verseLoading, error: verseError } = useDailyVerse();
+
   const copyToClipboard = async (text: string, type: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -53,26 +56,47 @@ export default function DailyGuidance() {
             </div>
             <div>
               <CardTitle className="text-lg">Verse of the Day</CardTitle>
-              <p className="text-sm text-muted-foreground">{dailyContent.verse.reference}</p>
+              {verseLoading ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                  <span className="text-sm text-muted-foreground">Loading...</span>
+                </div>
+              ) : verseError ? (
+                <p className="text-sm text-destructive">Failed to load verse</p>
+              ) : (
+                <p className="text-sm text-muted-foreground">{dailyVerse?.reference}</p>
+              )}
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <p className="text-right text-lg font-arabic text-primary leading-relaxed">
-                {dailyContent.verse.arabic}
-              </p>
-              <p className="text-sm text-muted-foreground italic">
-                "{dailyContent.verse.english}"
-              </p>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute bottom-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
-              onClick={() => copyToClipboard(`${dailyContent.verse.arabic}\n\n"${dailyContent.verse.english}"\n\n(${dailyContent.verse.reference})`, "Verse")}
-            >
-              <Copy className="h-4 w-4" />
-            </Button>
+            {verseLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              </div>
+            ) : verseError ? (
+              <div className="text-center py-8">
+                <p className="text-sm text-muted-foreground">Unable to load today's verse</p>
+              </div>
+            ) : dailyVerse ? (
+              <div className="space-y-2">
+                <p className="text-right text-lg font-arabic text-primary leading-relaxed">
+                  {dailyVerse.ayah_text_ar}
+                </p>
+                <p className="text-sm text-muted-foreground italic">
+                  "{dailyVerse.translation}"
+                </p>
+              </div>
+            ) : null}
+            {dailyVerse && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute bottom-3 right-3 h-8 w-8 opacity-60 hover:opacity-100 transition-opacity"
+                onClick={() => copyToClipboard(`${dailyVerse.ayah_text_ar}\n\n"${dailyVerse.translation}"\n\n(${dailyVerse.reference})`, "Verse")}
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+            )}
           </CardContent>
         </Card>
 
