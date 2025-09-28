@@ -48,6 +48,8 @@ serve(async (req) => {
       const afasySurah = afasyData.data.surahs[surahIndex]
       
       console.log(`Processing Surah ${surah.id}: ${surah.name}`)
+      console.log(`Al-Sudais ayahs available: ${sudaisSurah?.ayahs?.length || 0}`)
+      console.log(`Al-Afasy ayahs available: ${afasySurah?.ayahs?.length || 0}`)
 
       // Insert ayahs for both reciters
       const sudaisAyahsToInsert = surah.verses.map((verse: any, index: number) => ({
@@ -67,6 +69,7 @@ serve(async (req) => {
       }))
 
       const allAyahs = [...sudaisAyahsToInsert, ...afasyAyahs]
+      console.log(`Total ayahs to insert: ${allAyahs.length} (${sudaisAyahsToInsert.length} Al-Sudais + ${afasyAyahs.length} Al-Afasy)`)
 
       const { data: insertedAyahs, error: ayahError } = await supabase
         .from('ayahs')
