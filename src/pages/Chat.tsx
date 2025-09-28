@@ -18,7 +18,7 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      content: "As-salamu alaykum! I'm your Muslim AI assistant. I can help you with questions about Islam, Quran, Hadith, Islamic history, and provide guidance based on Islamic teachings. How can I assist you today?",
+      content: "How can I help you today?",
       sender: "ai",
       timestamp: new Date(),
     },
