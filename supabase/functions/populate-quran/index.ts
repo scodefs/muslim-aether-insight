@@ -78,6 +78,7 @@ serve(async (req) => {
 
       if (ayahError) {
         console.error(`Error inserting ayahs for surah ${surah.id}:`, ayahError)
+        console.error('Error details:', JSON.stringify(ayahError, null, 2))
         continue
       }
 
