@@ -9,12 +9,20 @@ export interface Surah {
   revelation_place: string;
 }
 
+export interface Reciter {
+  id: number;
+  name: string;
+  name_ar: string;
+  identifier: string;
+}
+
 export interface Ayah {
   id: number;
   surah_id: number;
   ayah_number: number;
   text_ar: string;
   audio_url?: string;
+  reciter_id?: number;
 }
 
 export interface Translation {
@@ -57,7 +65,7 @@ export function useSurahs() {
   return { surahs, loading, error };
 }
 
-export function useSurahWithAyahs(surahId: number | null, languageCode: string = 'en', translatorName: string = 'Hilali & Khan') {
+export function useSurahWithAyahs(surahId: number | null, languageCode: string = 'en', translatorName: string = 'Hilali & Khan', reciterId: number | null = null) {
   const [ayahs, setAyahs] = useState<AyahWithTranslation[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -71,7 +79,7 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
     async function fetchAyahs() {
       setLoading(true);
       try {
-        const { data, error } = await supabase
+        let query = supabase
           .from('ayahs')
           .select(`
             *,
@@ -84,8 +92,14 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
           `)
           .eq('surah_id', surahId)
           .eq('translations.language_code', languageCode)
-          .eq('translations.translator_name', translatorName)
-          .order('ayah_number');
+          .eq('translations.translator_name', translatorName);
+
+        // Filter by reciter if specified
+        if (reciterId) {
+          query = query.eq('reciter_id', reciterId);
+        }
+
+        const { data, error } = await query.order('ayah_number');
 
         if (error) throw error;
 
@@ -95,6 +109,7 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
           ayah_number: ayah.ayah_number,
           text_ar: ayah.text_ar,
           audio_url: ayah.audio_url,
+          reciter_id: ayah.reciter_id,
           translation: ayah.translations?.[0] ? {
             id: ayah.translations[0].id,
             ayah_id: ayah.id,
@@ -113,7 +128,35 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
     }
 
     fetchAyahs();
-  }, [surahId, languageCode, translatorName]);
+  }, [surahId, languageCode, translatorName, reciterId]);
 
   return { ayahs, loading, error };
+}
+
+export function useReciters() {
+  const [reciters, setReciters] = useState<Reciter[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchReciters() {
+      try {
+        const { data, error } = await supabase
+          .from('reciters')
+          .select('id, name, name_ar, identifier')
+          .order('name');
+
+        if (error) throw error;
+        setReciters(data || []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch reciters');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchReciters();
+  }, []);
+
+  return { reciters, loading, error };
 }

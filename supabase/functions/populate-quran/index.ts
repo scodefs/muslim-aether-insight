@@ -24,16 +24,26 @@ serve(async (req) => {
     const arabicResponse = await fetch('https://raw.githubusercontent.com/risan/quran-json/main/dist/quran.json')
     const arabicData = await arabicResponse.json()
     
-    // Fetch English translations and audio data
-    const [sahihResponse, hilaliResponse, audioResponse] = await Promise.all([
+    // Fetch English translations and audio data for both reciters
+    const [sahihResponse, hilaliResponse, sudaisAudioResponse, afasyAudioResponse] = await Promise.all([
       fetch('https://api.alquran.cloud/v1/quran/en.sahih'),
       fetch('https://api.alquran.cloud/v1/quran/en.hilali'),
-      fetch('https://api.alquran.cloud/v1/quran/ar.abdurrahmaansudais') // Abdul Rahman Al-Sudais audio
+      fetch('https://api.alquran.cloud/v1/quran/ar.abdurrahmaansudais'), // Abdul Rahman Al-Sudais audio
+      fetch('https://api.alquran.cloud/v1/quran/ar.alafasy') // Mishari Rashid Al-Afasy audio
     ])
     
     const sahihData = await sahihResponse.json()
     const hilaliData = await hilaliResponse.json()
-    const audioData = await audioResponse.json()
+    const sudaisAudioData = await sudaisAudioResponse.json()
+    const afasyAudioData = await afasyAudioResponse.json()
+
+    // Get reciter IDs
+    const { data: reciters } = await supabase
+      .from('reciters')
+      .select('id, identifier');
+    
+    const sudaisReciter = reciters?.find(r => r.identifier === 'ar.abdurrahmaansudais');
+    const afasyReciter = reciters?.find(r => r.identifier === 'ar.alafasy');
 
     console.log(`Processing ${arabicData.length} surahs...`)
 
@@ -42,32 +52,56 @@ serve(async (req) => {
       const surah = arabicData[surahIndex]
       const sahihSurah = sahihData.data.surahs[surahIndex]
       const hilaliSurah = hilaliData.data.surahs[surahIndex]
-      const audioSurah = audioData.data.surahs[surahIndex]
+      const sudaisAudioSurah = sudaisAudioData.data.surahs[surahIndex]
+      const afasyAudioSurah = afasyAudioData.data.surahs[surahIndex]
       
       console.log(`Processing Surah ${surah.id}: ${surah.name}`)
 
-      // Insert all ayahs for this surah with conflict resolution
-      const ayahsToInsert = surah.verses.map((verse: any, index: number) => ({
+      // Insert all ayahs for this surah for both reciters
+      const sudaisAyahsToInsert = surah.verses.map((verse: any, index: number) => ({
         surah_id: surah.id,
         ayah_number: verse.id,
         text_ar: verse.text,
-        audio_url: audioSurah?.ayahs?.[index]?.audio || null
+        audio_url: sudaisAudioSurah?.ayahs?.[index]?.audio || null,
+        reciter_id: sudaisReciter?.id
       }))
 
-      const { data: insertedAyahs, error: ayahError } = await supabase
+      const afasyAyahsToInsert = surah.verses.map((verse: any, index: number) => ({
+        surah_id: surah.id,
+        ayah_number: verse.id,
+        text_ar: verse.text,
+        audio_url: afasyAudioSurah?.ayahs?.[index]?.audio || null,
+        reciter_id: afasyReciter?.id
+      }))
+
+      // Insert Al-Sudais ayahs
+      const { data: sudaisInsertedAyahs, error: sudaisAyahError } = await supabase
         .from('ayahs')
-        .upsert(ayahsToInsert, { 
-          onConflict: 'surah_id,ayah_number',
+        .upsert(sudaisAyahsToInsert, { 
+          onConflict: 'surah_id,ayah_number,reciter_id',
           ignoreDuplicates: false 
         })
         .select('id, ayah_number')
 
-      if (ayahError) {
-        console.error(`Error inserting ayahs for surah ${surah.id}:`, ayahError)
-        continue
+      if (sudaisAyahError) {
+        console.error(`Error inserting Al-Sudais ayahs for surah ${surah.id}:`, sudaisAyahError)
       }
 
-      console.log(`Inserted ${insertedAyahs.length} ayahs for Surah ${surah.id}`)
+      // Insert Al-Afasy ayahs
+      const { data: afasyInsertedAyahs, error: afasyAyahError } = await supabase
+        .from('ayahs')
+        .upsert(afasyAyahsToInsert, { 
+          onConflict: 'surah_id,ayah_number,reciter_id',
+          ignoreDuplicates: false 
+        })
+        .select('id, ayah_number')
+
+      if (afasyAyahError) {
+        console.error(`Error inserting Al-Afasy ayahs for surah ${surah.id}:`, afasyAyahError)
+      }
+
+      const insertedAyahs = [...(sudaisInsertedAyahs || []), ...(afasyInsertedAyahs || [])]
+      console.log(`Inserted ${insertedAyahs.length} ayahs for Surah ${surah.id} (both reciters)`)
 
       // Insert translations for each ayah - both Sahih International and Hilali & Khan
       const allTranslationsToInsert = []
