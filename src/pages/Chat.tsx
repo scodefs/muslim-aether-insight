@@ -15,14 +15,7 @@ interface Message {
 const WEBHOOK_URL = "https://sudeis21.app.n8n.cloud/webhook-test/a04da8b6-6276-4919-93ed-366962ffcb97";
 
 export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      content: "How can I help you today?",
-      sender: "ai",
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const webhookData = useWebhookData();
@@ -120,22 +113,32 @@ export default function Chat() {
       <div className="flex-1 overflow-hidden">
         <ScrollArea ref={scrollAreaRef} className="h-full px-4 pt-6">
           <div className="max-w-4xl mx-auto">
-            {messages.map((message) => (
-              <ChatMessage key={message.id} message={message} />
-            ))}
-            {isTyping && (
-              <div className="flex gap-3 mb-6">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
-                  <div className="w-4 h-4 rounded-full bg-primary animate-pulse" />
-                </div>
-                <div className="bg-card text-card-foreground border rounded-lg px-4 py-3">
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse" />
-                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse delay-100" />
-                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse delay-200" />
-                  </div>
-                </div>
+            {messages.length === 0 && !isTyping ? (
+              <div className="flex flex-col items-center justify-center h-full min-h-[60vh] text-center">
+                <h1 className="text-4xl font-medium text-foreground mb-8">
+                  Where should we begin?
+                </h1>
               </div>
+            ) : (
+              <>
+                {messages.map((message) => (
+                  <ChatMessage key={message.id} message={message} />
+                ))}
+                {isTyping && (
+                  <div className="flex gap-3 mb-6">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
+                      <div className="w-4 h-4 rounded-full bg-primary animate-pulse" />
+                    </div>
+                    <div className="bg-card text-card-foreground border rounded-lg px-4 py-3">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse" />
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse delay-100" />
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse delay-200" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </ScrollArea>
