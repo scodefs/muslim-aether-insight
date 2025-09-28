@@ -155,11 +155,21 @@ serve(async (req) => {
       }
     }
 
+    // Count final results
+    const { data: finalCount, error: countError } = await supabase
+      .from('ayahs')
+      .select('reciter_id', { count: 'exact' })
+
+    if (!countError && finalCount) {
+      console.log(`Final ayah count: ${finalCount.length}`)
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'Complete Quran data populated successfully',
-        totalSurahs: arabicData.length
+        totalSurahs: arabicData.length,
+        debug: 'Check edge function logs for detailed processing information'
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
