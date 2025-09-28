@@ -50,7 +50,7 @@ serve(async (req) => {
       console.log(`Processing Surah ${surah.id}: ${surah.name}`)
 
       // Insert ayahs for both reciters
-      const sudaisAyahs = surah.verses.map((verse: any, index: number) => ({
+      const sudaisAyahsToInsert = surah.verses.map((verse: any, index: number) => ({
         surah_id: surah.id,
         ayah_number: verse.id,
         text_ar: verse.text,
@@ -66,7 +66,7 @@ serve(async (req) => {
         reciter_id: 2 // Al-Afasy
       }))
 
-      const allAyahs = [...sudaisAyahs, ...afasyAyahs]
+      const allAyahs = [...sudaisAyahsToInsert, ...afasyAyahs]
 
       const { data: insertedAyahs, error: ayahError } = await supabase
         .from('ayahs')
@@ -85,12 +85,14 @@ serve(async (req) => {
       console.log(`Inserted ${insertedAyahs.length} ayahs for Surah ${surah.id}`)
 
       // Insert translations for each ayah - both Sahih International and Hilali & Khan
-      // Only create translations for unique ayah numbers (both reciters share same text)
-      const uniqueAyahs = insertedAyahs.filter((ayah: any) => ayah.reciter_id === 1) // Use Al-Sudais for translations
+      // Only create translations for Al-Sudais ayahs to avoid duplication
+      const sudaisAyahs = insertedAyahs.filter((ayah: any) => ayah.reciter_id === 1)
+      console.log(`Found ${sudaisAyahs.length} Al-Sudais ayahs for translations`)
+      
       const allTranslationsToInsert = []
       
       // Sahih International translations
-      const sahihTranslations = uniqueAyahs.map((ayah: any, index: number) => {
+      const sahihTranslations = sudaisAyahs.map((ayah: any, index: number) => {
         const sahihVerse = sahihSurah?.ayahs?.[index]
         return {
           ayah_id: ayah.id,
@@ -98,10 +100,10 @@ serve(async (req) => {
           text_translated: sahihVerse?.text || '',
           translator_name: 'Sahih International'
         }
-      }).filter(t => t.text_translated)
+      }).filter((t: any) => t.text_translated)
       
       // Hilali & Khan translations  
-      const hilaliTranslations = uniqueAyahs.map((ayah: any, index: number) => {
+      const hilaliTranslations = sudaisAyahs.map((ayah: any, index: number) => {
         const hilaliVerse = hilaliSurah?.ayahs?.[index]
         return {
           ayah_id: ayah.id,
@@ -109,14 +111,14 @@ serve(async (req) => {
           text_translated: hilaliVerse?.text || '',
           translator_name: 'Hilali & Khan'
         }
-      }).filter(t => t.text_translated)
+      }).filter((t: any) => t.text_translated)
       
       allTranslationsToInsert.push(...sahihTranslations, ...hilaliTranslations)
 
       if (allTranslationsToInsert.length > 0) {
         // Insert translations in batches, handling conflicts properly
-        const sahihBatch = allTranslationsToInsert.filter(t => t.translator_name === 'Sahih International');
-        const hilaliBatch = allTranslationsToInsert.filter(t => t.translator_name === 'Hilali & Khan');
+        const sahihBatch = allTranslationsToInsert.filter((t: any) => t.translator_name === 'Sahih International');
+        const hilaliBatch = allTranslationsToInsert.filter((t: any) => t.translator_name === 'Hilali & Khan');
         
         // Insert Sahih International translations
         if (sahihBatch.length > 0) {
