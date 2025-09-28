@@ -40,7 +40,7 @@ serve(async (req) => {
     console.log(`Processing ${arabicData.length} surahs...`)
 
     // Process each Surah
-    for (let surahIndex = 0; surahIndex < arabicData.length; surahIndex++) {
+    for (let surahIndex = 0; surahIndex < Math.min(arabicData.length, 5); surahIndex++) { // Start with first 5 surahs for testing
       const surah = arabicData[surahIndex]
       const sahihSurah = sahihData.data.surahs[surahIndex]
       const hilaliSurah = hilaliData.data.surahs[surahIndex]
@@ -51,15 +51,8 @@ serve(async (req) => {
       console.log(`Al-Sudais ayahs available: ${sudaisSurah?.ayahs?.length || 0}`)
       console.log(`Al-Afasy ayahs available: ${afasySurah?.ayahs?.length || 0}`)
 
-      // Insert ayahs for both reciters
-      const sudaisAyahsToInsert = surah.verses.map((verse: any, index: number) => ({
-        surah_id: surah.id,
-        ayah_number: verse.id,
-        text_ar: verse.text,
-        audio_url: sudaisSurah?.ayahs?.[index]?.audio || null,
-        reciter_id: 1 // Al-Sudais
-      }))
-
+      // First, ensure Al-Sudais ayahs exist (these should already be there)
+      // Then add Al-Afasy ayahs
       const afasyAyahs = surah.verses.map((verse: any, index: number) => ({
         surah_id: surah.id,
         ayah_number: verse.id,
@@ -68,91 +61,22 @@ serve(async (req) => {
         reciter_id: 2 // Al-Afasy
       }))
 
-      const allAyahs = [...sudaisAyahsToInsert, ...afasyAyahs]
-      console.log(`Total ayahs to insert: ${allAyahs.length} (${sudaisAyahsToInsert.length} Al-Sudais + ${afasyAyahs.length} Al-Afasy)`)
+      console.log(`Inserting ${afasyAyahs.length} Al-Afasy ayahs for Surah ${surah.id}`)
 
+      // Insert only Al-Afasy ayahs (Al-Sudais already exist)
       const { data: insertedAyahs, error: ayahError } = await supabase
         .from('ayahs')
-        .upsert(allAyahs, { 
-          onConflict: 'surah_id,ayah_number,reciter_id',
-          ignoreDuplicates: false 
-        })
+        .insert(afasyAyahs)
         .select('id, ayah_number, reciter_id')
 
       if (ayahError) {
-        console.error(`Error inserting ayahs for surah ${surah.id}:`, ayahError)
+        console.error(`Error inserting Al-Afasy ayahs for surah ${surah.id}:`, ayahError)
         console.error('Error details:', JSON.stringify(ayahError, null, 2))
+        // Continue with next surah instead of failing completely
         continue
       }
 
-      console.log(`Inserted ${insertedAyahs.length} ayahs for Surah ${surah.id}`)
-
-      // Insert translations for each ayah - both Sahih International and Hilali & Khan
-      // Only create translations for Al-Sudais ayahs to avoid duplication
-      const sudaisAyahs = insertedAyahs.filter((ayah: any) => ayah.reciter_id === 1)
-      console.log(`Found ${sudaisAyahs.length} Al-Sudais ayahs for translations`)
-      
-      const allTranslationsToInsert = []
-      
-      // Sahih International translations
-      const sahihTranslations = sudaisAyahs.map((ayah: any, index: number) => {
-        const sahihVerse = sahihSurah?.ayahs?.[index]
-        return {
-          ayah_id: ayah.id,
-          language_code: 'en',
-          text_translated: sahihVerse?.text || '',
-          translator_name: 'Sahih International'
-        }
-      }).filter((t: any) => t.text_translated)
-      
-      // Hilali & Khan translations  
-      const hilaliTranslations = sudaisAyahs.map((ayah: any, index: number) => {
-        const hilaliVerse = hilaliSurah?.ayahs?.[index]
-        return {
-          ayah_id: ayah.id,
-          language_code: 'en',
-          text_translated: hilaliVerse?.text || '',
-          translator_name: 'Hilali & Khan'
-        }
-      }).filter((t: any) => t.text_translated)
-      
-      allTranslationsToInsert.push(...sahihTranslations, ...hilaliTranslations)
-
-      if (allTranslationsToInsert.length > 0) {
-        // Insert translations in batches, handling conflicts properly
-        const sahihBatch = allTranslationsToInsert.filter((t: any) => t.translator_name === 'Sahih International');
-        const hilaliBatch = allTranslationsToInsert.filter((t: any) => t.translator_name === 'Hilali & Khan');
-        
-        // Insert Sahih International translations
-        if (sahihBatch.length > 0) {
-          const { error: sahihError } = await supabase
-            .from('translations')
-            .upsert(sahihBatch, { 
-              onConflict: 'ayah_id,language_code,translator_name',
-              ignoreDuplicates: false 
-            })
-
-          if (sahihError) {
-            console.error(`Error inserting Sahih translations for surah ${surah.id}:`, sahihError)
-          }
-        }
-        
-        // Insert Hilali & Khan translations
-        if (hilaliBatch.length > 0) {
-          const { error: hilaliError } = await supabase
-            .from('translations')
-            .upsert(hilaliBatch, { 
-              onConflict: 'ayah_id,language_code,translator_name',
-              ignoreDuplicates: false 
-            })
-
-          if (hilaliError) {
-            console.error(`Error inserting Hilali translations for surah ${surah.id}:`, hilaliError)
-          }
-        }
-        
-        console.log(`Processed ${allTranslationsToInsert.length} translations for Surah ${surah.id}`)
-      }
+      console.log(`Successfully inserted ${insertedAyahs?.length || 0} Al-Afasy ayahs for Surah ${surah.id}`)
     }
 
     // Count final results
