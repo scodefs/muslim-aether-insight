@@ -1,4 +1,4 @@
-import { MessageSquare, BarChart3, Heart, BookOpen } from "lucide-react";
+import { MessageSquare, BarChart3, Heart, BookOpen, Users } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -16,6 +16,7 @@ const items = [
   { title: "AI Chat", url: "/", icon: MessageSquare },
   { title: "Daily Guidance", url: "/daily-guidance", icon: Heart },
   { title: "Quran", url: "/quran", icon: BookOpen },
+  { title: "Speakers", url: "/speakers", icon: Users },
   { title: "Dashboard", url: "/dashboard", icon: BarChart3 },
 ];
 

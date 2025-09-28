@@ -9,6 +9,8 @@ import Chat from "./pages/Chat";
 import Dashboard from "./pages/Dashboard";
 import DailyGuidance from "./pages/DailyGuidance";
 import Quran from "./pages/Quran";
+import Speakers from "./pages/Speakers";
+import SpeakerProfile from "./pages/SpeakerProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +33,8 @@ const App = () => (
                   <Route path="/" element={<Chat />} />
                   <Route path="/daily-guidance" element={<DailyGuidance />} />
                   <Route path="/quran" element={<Quran />} />
+                  <Route path="/speakers" element={<Speakers />} />
+                  <Route path="/speakers/:id" element={<SpeakerProfile />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
