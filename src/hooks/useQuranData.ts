@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import type { Tables } from '@/integrations/supabase/types';
 
 export interface Surah {
   id: number;
@@ -25,14 +26,7 @@ export interface Translation {
   translator_name?: string;
 }
 
-export interface Reciter {
-  id: number;
-  name: string;
-  name_ar: string | null;
-  identifier: string;
-  language_code: string;
-  created_at: string | null;
-}
+type Reciter = Tables<'reciters'>;
 
 export interface AyahWithTranslation extends Ayah {
   translation?: Translation;
@@ -92,6 +86,7 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
             )
           `)
           .eq('surah_id', surahId)
+          .eq('reciter_id', reciterId)
           .eq('translations.language_code', languageCode)
           .eq('translations.translator_name', translatorName)
           .order('ayah_number');
@@ -128,25 +123,29 @@ export function useSurahWithAyahs(surahId: number | null, languageCode: string =
 }
 
 export function useReciters() {
-  // Hardcoded reciters for now
-  const reciters: Reciter[] = [
-    {
-      id: 1,
-      name: "Abdul Rahman Al-Sudais",
-      name_ar: "عبد الرحمن السديس",
-      identifier: "abdurrahmaansudais",
-      language_code: "ar",
-      created_at: null
-    },
-    {
-      id: 2,
-      name: "Mishari Rashid Al-Afasy",
-      name_ar: "مشاري راشد العفاسي",
-      identifier: "alafasy",
-      language_code: "ar",
-      created_at: null
-    }
-  ];
+  const [reciters, setReciters] = useState<Reciter[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  return { reciters, loading: false, error: null };
+  useEffect(() => {
+    async function fetchReciters() {
+      try {
+        const { data, error } = await supabase
+          .from('reciters')
+          .select('*')
+          .order('id');
+
+        if (error) throw error;
+        setReciters(data || []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch reciters');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchReciters();
+  }, []);
+
+  return { reciters, loading, error };
 }

@@ -20,6 +20,7 @@ export type Database = {
           ayah_number: number
           created_at: string | null
           id: number
+          reciter_id: number
           surah_id: number
           text_ar: string
         }
@@ -28,6 +29,7 @@ export type Database = {
           ayah_number: number
           created_at?: string | null
           id?: number
+          reciter_id: number
           surah_id: number
           text_ar: string
         }
@@ -36,10 +38,18 @@ export type Database = {
           ayah_number?: number
           created_at?: string | null
           id?: number
+          reciter_id?: number
           surah_id?: number
           text_ar?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "ayahs_reciter_id_fkey"
+            columns: ["reciter_id"]
+            isOneToOne: false
+            referencedRelation: "reciters"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ayahs_surah_id_fkey"
             columns: ["surah_id"]
@@ -48,6 +58,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      reciters: {
+        Row: {
+          created_at: string | null
+          id: number
+          identifier: string
+          language_code: string
+          name: string
+          name_ar: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          identifier: string
+          language_code?: string
+          name: string
+          name_ar?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          identifier?: string
+          language_code?: string
+          name?: string
+          name_ar?: string | null
+        }
+        Relationships: []
       }
       surahs: {
         Row: {

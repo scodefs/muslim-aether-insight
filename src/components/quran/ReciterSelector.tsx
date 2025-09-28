@@ -1,15 +1,9 @@
 import { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 
-export interface Reciter {
-  id: number;
-  name: string;
-  name_ar: string | null;
-  identifier: string;
-  language_code: string;
-  created_at: string | null;
-}
+type Reciter = Tables<'reciters'>;
 
 interface ReciterSelectorProps {
   selectedReciter: number | null;
@@ -18,27 +12,30 @@ interface ReciterSelectorProps {
 }
 
 export function ReciterSelector({ selectedReciter, onReciterChange, loading = false }: ReciterSelectorProps) {
-  // Hardcoded reciters for now
-  const reciters: Reciter[] = [
-    {
-      id: 1,
-      name: "Abdul Rahman Al-Sudais",
-      name_ar: "عبد الرحمن السديس",
-      identifier: "abdurrahmaansudais",
-      language_code: "ar",
-      created_at: null
-    },
-    {
-      id: 2,
-      name: "Mishari Rashid Al-Afasy",
-      name_ar: "مشاري راشد العفاسي",
-      identifier: "alafasy",
-      language_code: "ar",
-      created_at: null
-    }
-  ];
+  const [reciters, setReciters] = useState<Reciter[]>([]);
+  const [reciterLoading, setReciterLoading] = useState(true);
 
-  const isLoading = loading;
+  useEffect(() => {
+    async function fetchReciters() {
+      try {
+        const { data, error } = await supabase
+          .from('reciters')
+          .select('*')
+          .order('id');
+
+        if (error) throw error;
+        setReciters(data || []);
+      } catch (err) {
+        console.error('Failed to fetch reciters:', err);
+      } finally {
+        setReciterLoading(false);
+      }
+    }
+
+    fetchReciters();
+  }, []);
+
+  const isLoading = loading || reciterLoading;
   const selectedReciterData = selectedReciter ? reciters.find(r => r.id === selectedReciter) : null;
 
   return (
