@@ -31,7 +31,7 @@ export function AppSidebar() {
     isActive ? "bg-sidebar-accent text-sidebar-primary" : "hover:bg-sidebar-accent/50";
 
   return (
-    <Sidebar className={isCollapsed ? "w-14" : "w-64"} collapsible="icon">
+    <Sidebar className="w-full h-full" collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className={isCollapsed ? "sr-only" : ""}>
