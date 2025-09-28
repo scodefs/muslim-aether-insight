@@ -20,7 +20,7 @@ export type Database = {
           ayah_number: number
           created_at: string | null
           id: number
-          reciter_id: number | null
+          reciter_id: number
           surah_id: number
           text_ar: string
         }
@@ -29,7 +29,7 @@ export type Database = {
           ayah_number: number
           created_at?: string | null
           id?: number
-          reciter_id?: number | null
+          reciter_id: number
           surah_id: number
           text_ar: string
         }
@@ -38,7 +38,7 @@ export type Database = {
           ayah_number?: number
           created_at?: string | null
           id?: number
-          reciter_id?: number | null
+          reciter_id?: number
           surah_id?: number
           text_ar?: string
         }
