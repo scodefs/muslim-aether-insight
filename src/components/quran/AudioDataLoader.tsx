@@ -31,7 +31,7 @@ export function AudioDataLoader() {
       }
 
       setProgress(50);
-      setStatus('Fetching audio URLs from Al-Quran Cloud...');
+      setStatus('Fetching audio URLs from both reciters...');
 
       // Simulate progress updates
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -44,7 +44,7 @@ export function AudioDataLoader() {
       setIsComplete(true);
 
       toast.success('Audio data populated successfully!', {
-        description: 'All verses now have audio URLs from Abdul Rahman Al-Sudais'
+        description: 'All verses now have audio URLs from both Abdul Rahman Al-Sudais and Mishari Rashid Al-Afasy'
       });
 
     } catch (error) {
@@ -68,7 +68,7 @@ export function AudioDataLoader() {
           <div>
             <CardTitle className="text-xl">Audio Data Loader</CardTitle>
             <CardDescription>
-              Load complete Quran audio data (all 6,236 verses with recitation by Abdul Rahman Al-Sudais)
+              Load complete Quran audio data for both reciters (12,472 total verses with recitation by Abdul Rahman Al-Sudais and Mishari Rashid Al-Afasy)
             </CardDescription>
           </div>
         </div>
@@ -109,10 +109,10 @@ export function AudioDataLoader() {
         </Button>
 
         <div className="text-xs text-muted-foreground space-y-1">
-          <p>• This will fetch audio URLs for all Quranic verses</p>
-          <p>• Audio recitation by Abdul Rahman Al-Sudais</p>
+          <p>• This will fetch audio URLs for all Quranic verses from both reciters</p>
+          <p>• Audio recitation by Abdul Rahman Al-Sudais and Mishari Rashid Al-Afasy</p>
           <p>• Process may take a few minutes to complete</p>
-          <p>• Existing data will be updated with audio URLs</p>
+          <p>• This will add 6,236 additional verses for Al-Afasy (total: 12,472 verses)</p>
         </div>
       </CardContent>
     </Card>
