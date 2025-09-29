@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Loader2, Check } from 'lucide-react';
+import { BookOpen, Loader2, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Surah } from '@/hooks/useQuranData';
 import { useMemorizationProgress } from '@/hooks/useMemorizationProgress';
 
@@ -12,6 +13,21 @@ interface SurahGridSelectorProps {
 
 export function SurahGridSelector({ surahs, loading, onSurahSelect }: SurahGridSelectorProps) {
   const { isSurahMemorized } = useMemorizationProgress();
+  const [currentPage, setCurrentPage] = useState(1);
+  const surahsPerPage = 20;
+  
+  const totalPages = Math.ceil(surahs.length / surahsPerPage);
+  const startIndex = (currentPage - 1) * surahsPerPage;
+  const endIndex = startIndex + surahsPerPage;
+  const currentSurahs = surahs.slice(startIndex, endIndex);
+  
+  const handlePrevious = () => {
+    setCurrentPage(prev => Math.max(1, prev - 1));
+  };
+  
+  const handleNext = () => {
+    setCurrentPage(prev => Math.min(totalPages, prev + 1));
+  };
 
   if (loading) {
     return (
@@ -26,11 +42,16 @@ export function SurahGridSelector({ surahs, loading, onSurahSelect }: SurahGridS
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-semibold text-foreground mb-2">Choose a Surah to Memorize</h2>
-        <p className="text-muted-foreground">Select any chapter to begin your memorization journey</p>
+        <p className="text-muted-foreground">
+          Select any chapter to begin your memorization journey
+          <span className="block mt-1 text-sm">
+            Page {currentPage} of {totalPages} ({surahs.length} total surahs)
+          </span>
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {surahs.map((surah) => {
+        {currentSurahs.map((surah) => {
           const isMemorized = isSurahMemorized(surah.id);
           return (
             <Card 
@@ -87,6 +108,34 @@ export function SurahGridSelector({ surahs, loading, onSurahSelect }: SurahGridS
           );
         })}
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 mt-8">
+          <Button
+            variant="outline"
+            onClick={handlePrevious}
+            disabled={currentPage === 1}
+            className="flex items-center gap-2"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Previous
+          </Button>
+          
+          <span className="text-sm text-muted-foreground px-4">
+            {currentPage} of {totalPages}
+          </span>
+          
+          <Button
+            variant="outline"
+            onClick={handleNext}
+            disabled={currentPage === totalPages}
+            className="flex items-center gap-2"
+          >
+            Next
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
