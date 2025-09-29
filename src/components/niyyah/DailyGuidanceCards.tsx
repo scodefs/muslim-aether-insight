@@ -5,11 +5,6 @@ import { BookOpen, Heart, Star, User, Copy, Loader2 } from "lucide-react";
 import { useDailyVerse } from "@/hooks/useDailyVerse";
 
 const dailyContent = {
-  verse: {
-    arabic: "وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا",
-    english: "And whoever fears Allah - He will make for him a way out",
-    reference: "Surah At-Talaq 65:2"
-  },
   hadith: {
     arabic: "الْمُؤْمِنُ لِلْمُؤْمِنِ كَالْبُنْيَانِ يَشُدُّ بَعْضُهُ بَعْضًا",
     english: "The believer to another believer is like a building whose different parts enforce each other.",
@@ -26,7 +21,7 @@ const dailyContent = {
   }
 };
 
-export default function DailyGuidance() {
+export function DailyGuidanceCards() {
   const { verse: dailyVerse, loading: verseLoading, error: verseError } = useDailyVerse();
 
   const copyToClipboard = async (text: string, type: string) => {
@@ -39,9 +34,9 @@ export default function DailyGuidance() {
   };
 
   return (
-    <div className="flex-1 space-y-6 p-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Daily Guidance</h1>
+    <div className="mb-8">
+      <div className="mb-6">
+        <h2 className="text-2xl font-semibold mb-2">Daily Guidance</h2>
         <p className="text-muted-foreground">
           Daily Islamic reminders and inspiration for spiritual growth
         </p>

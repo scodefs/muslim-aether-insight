@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { SurahGridSelector } from '@/components/niyyah/SurahGridSelector';
 import { MemorizationSession } from '@/components/niyyah/MemorizationSession';
 import { ProgressTracker } from '@/components/niyyah/ProgressTracker';
+import { DailyGuidanceCards } from '@/components/niyyah/DailyGuidanceCards';
 import { useSurahs } from '@/hooks/useQuranData';
 
 export default function NiyyahSpace() {
@@ -24,11 +25,13 @@ export default function NiyyahSpace() {
             Niyyah Space
           </h1>
           <p className="text-muted-foreground text-lg">
-            Your journey to memorize the Holy Quran
+            Your comprehensive space for Quran memorization and daily spiritual guidance
           </p>
         </div>
 
         <ProgressTracker />
+
+        <DailyGuidanceCards />
 
         {!selectedSurahId ? (
           <SurahGridSelector 
