@@ -63,20 +63,20 @@ export type Database = {
         Row: {
           ayah_id: number
           created_at: string | null
-          date: string
           id: number
+          time_key: string
         }
         Insert: {
           ayah_id: number
           created_at?: string | null
-          date?: string
           id?: number
+          time_key?: string
         }
         Update: {
           ayah_id?: number
           created_at?: string | null
-          date?: string
           id?: number
+          time_key?: string
         }
         Relationships: [
           {

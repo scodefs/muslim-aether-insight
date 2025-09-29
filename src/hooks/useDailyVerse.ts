@@ -26,7 +26,7 @@ export function useDailyVerse() {
         let { data: dailyVerseData, error: dailyVerseError } = await supabase
           .from('daily_verse')
           .select('ayah_id')
-          .eq('date', currentMinute)
+          .eq('time_key', currentMinute)
           .maybeSingle();
 
         // If no verse exists for this minute, create one with a random verse
@@ -42,7 +42,7 @@ export function useDailyVerse() {
           // Insert the new verse for this minute
           const { data: insertData, error: insertError } = await supabase
             .from('daily_verse')
-            .insert([{ date: currentMinute, ayah_id: randomVerseId }])
+            .insert([{ time_key: currentMinute, ayah_id: randomVerseId }])
             .select('ayah_id')
             .single();
 
