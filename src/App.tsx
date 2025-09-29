@@ -9,6 +9,7 @@ import Chat from "./pages/Chat";
 import Dashboard from "./pages/Dashboard";
 import DailyGuidance from "./pages/DailyGuidance";
 import Quran from "./pages/Quran";
+import NiyyahSpace from "./pages/NiyyahSpace";
 import Speakers from "./pages/Speakers";
 import SpeakerProfile from "./pages/SpeakerProfile";
 import NotFound from "./pages/NotFound";
@@ -33,6 +34,7 @@ const App = () => (
                   <Route path="/" element={<Chat />} />
                   <Route path="/daily-guidance" element={<DailyGuidance />} />
                   <Route path="/quran" element={<Quran />} />
+                  <Route path="/niyyah-space" element={<NiyyahSpace />} />
                   <Route path="/speakers" element={<Speakers />} />
                   <Route path="/speakers/:id" element={<SpeakerProfile />} />
                   <Route path="/dashboard" element={<Dashboard />} />

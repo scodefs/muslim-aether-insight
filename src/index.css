@@ -108,4 +108,27 @@ All colors MUST be HSL.
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/70;
   }
+
+  /* Arabic font styling */
+  .font-arabic {
+    font-family: 'Amiri', 'Lateef', 'Scheherazade New', serif;
+    line-height: 1.8;
+  }
+
+  /* 3D Card Flip Animation */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
 }

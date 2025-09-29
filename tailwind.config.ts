@@ -96,6 +96,12 @@ export default {
           "100%": { transform: "translateX(0)" }
         }
       },
+      perspective: {
+        "1000": "1000px",
+      },
+      rotate: {
+        "y-180": "rotateY(180deg)",
+      },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
