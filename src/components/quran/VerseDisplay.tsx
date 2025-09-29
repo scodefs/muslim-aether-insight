@@ -27,6 +27,11 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
   
   const surah = surahId ? surahs.find(s => s.id === surahId) : null;
 
+  // Reset page to 1 when surah changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [surahId]);
+
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
