@@ -1,17 +1,6 @@
-import { MessageSquare, BarChart3, Heart, BookOpen, Users } from "lucide-react";
+import { MessageSquare, Heart, BookOpen } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
 const items = [
   { title: "AI Chat", url: "/", icon: MessageSquare },
@@ -20,43 +9,42 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const { state } = useSidebar();
   const location = useLocation();
   const currentPath = location.pathname;
-  const isCollapsed = state === "collapsed";
 
   const isActive = (path: string) => currentPath === path;
-  const getNavCls = ({ isActive }: { isActive: boolean }) =>
-    isActive ? "bg-sidebar-accent text-sidebar-primary" : "hover:bg-sidebar-accent/50";
 
   return (
-    <Sidebar side="left" collapsible="icon">{/* Enable left-side resizing */}
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className={isCollapsed ? "sr-only" : ""}>
-            Muslim AI Assistant
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url} 
-                      end={item.url === "/"} 
-                      className={getNavCls}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!isCollapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarRail />
-    </Sidebar>
+    <div className="flex flex-col h-full p-4">
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold text-sidebar-foreground">
+          Muslim AI Assistant
+        </h2>
+      </div>
+      
+      <nav className="space-y-2">
+        {items.map((item) => {
+          const Icon = item.icon;
+          const active = isActive(item.url);
+          
+          return (
+            <NavLink
+              key={item.title}
+              to={item.url}
+              end={item.url === "/"}
+              className={cn(
+                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                active 
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground" 
+                  : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
+              )}
+            >
+              <Icon className="h-4 w-4" />
+              <span>{item.title}</span>
+            </NavLink>
+          );
+        })}
+      </nav>
+    </div>
   );
 }
