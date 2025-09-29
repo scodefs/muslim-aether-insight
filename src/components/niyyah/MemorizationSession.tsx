@@ -136,6 +136,7 @@ export function MemorizationSession({ surahId, onBack }: MemorizationSessionProp
         onClose={() => setShowEncouragement(false)}
         onNext={handleNextVerse}
         canGoNext={currentVerseIndex < verseOrder.length - 1}
+        onFinishSession={onBack}
       />
     </div>
   );

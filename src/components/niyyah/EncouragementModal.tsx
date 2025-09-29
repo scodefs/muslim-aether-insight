@@ -7,6 +7,7 @@ interface EncouragementModalProps {
   onClose: () => void;
   onNext: () => void;
   canGoNext: boolean;
+  onFinishSession?: () => void;
 }
 
 const encouragementMessages = [
@@ -26,7 +27,8 @@ export function EncouragementModal({
   isOpen, 
   onClose, 
   onNext, 
-  canGoNext 
+  canGoNext,
+  onFinishSession
 }: EncouragementModalProps) {
   const randomMessage = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
   const RandomIcon = icons[Math.floor(Math.random() * icons.length)];
@@ -72,7 +74,13 @@ export function EncouragementModal({
               Continue Learning
             </Button>
           ) : (
-            <Button onClick={onClose} className="bg-primary hover:bg-primary/90">
+            <Button 
+              onClick={() => {
+                onClose();
+                onFinishSession?.();
+              }} 
+              className="bg-primary hover:bg-primary/90"
+            >
               Finish Session
             </Button>
           )}
