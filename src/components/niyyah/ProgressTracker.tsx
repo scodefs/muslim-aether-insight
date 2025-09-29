@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Trophy, Calendar, Target, BookOpen, Edit } from 'lucide-react';
 import { useMemorizationProgress } from '@/hooks/useMemorizationProgress';
 
-export function ProgressTracker() {
+export function ProgressTracker({ showMemorizationStats = true }: { showMemorizationStats?: boolean }) {
   const { getTotalProgress, getStreak, getDailyGoal, setDailyTarget } = useMemorizationProgress();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newTarget, setNewTarget] = useState('');
@@ -28,18 +28,20 @@ export function ProgressTracker() {
 
   const isGoalMet = dailyGoal.completed >= dailyGoal.target;
 
-  const stats = [
+  const allStats = [
     {
       icon: BookOpen,
       label: 'Total Verses',
       value: totalProgress.totalVerses,
-      color: 'bg-primary/10 text-primary'
+      color: 'bg-primary/10 text-primary',
+      isMemorizationStat: true
     },
     {
       icon: Trophy,
       label: 'Current Streak',
       value: `${currentStreak} days`,
-      color: 'bg-accent/10 text-accent'
+      color: 'bg-accent/10 text-accent',
+      isMemorizationStat: true
     },
     {
       icon: Target,
@@ -47,15 +49,19 @@ export function ProgressTracker() {
       value: `${dailyGoal.completed}/${dailyGoal.target}`,
       color: 'bg-secondary/10 text-secondary-foreground',
       isClickable: true,
-      isGoalMet: isGoalMet
+      isGoalMet: isGoalMet,
+      isMemorizationStat: true
     },
     {
       icon: Calendar,
       label: 'This Week',
       value: totalProgress.thisWeek,
-      color: 'bg-muted text-muted-foreground'
+      color: 'bg-muted text-muted-foreground',
+      isMemorizationStat: true
     }
   ];
+
+  const stats = showMemorizationStats ? allStats : [];
 
   return (
     <>

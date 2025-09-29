@@ -53,12 +53,12 @@ export default function NiyyahSpace() {
           </TabsList>
 
           <TabsContent value="guidance" className="space-y-8">
-            <ProgressTracker />
+            <ProgressTracker showMemorizationStats={false} />
             <DailyGuidanceCards />
           </TabsContent>
 
           <TabsContent value="memorize" className="space-y-8">
-            <ProgressTracker />
+            <ProgressTracker showMemorizationStats={true} />
             {!selectedSurahId ? (
               <SurahGridSelector 
                 surahs={surahs}
