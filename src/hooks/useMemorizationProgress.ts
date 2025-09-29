@@ -10,6 +10,7 @@ interface SurahProgress {
   surahId: number;
   memorizedVerses: number;
   lastAccessed: Date;
+  isMemorized: boolean;
 }
 
 interface DailyGoal {
@@ -21,6 +22,7 @@ interface DailyGoal {
 const STORAGE_KEY = 'memorization-progress';
 const STREAK_KEY = 'memorization-streak';
 const DAILY_GOAL_KEY = 'daily-goal';
+const MEMORIZED_SURAHS_KEY = 'memorized-surahs';
 
 export function useMemorizationProgress() {
   const [progress, setProgress] = useState<VerseProgress[]>([]);
@@ -30,12 +32,14 @@ export function useMemorizationProgress() {
     completed: 0,
     date: new Date().toDateString()
   });
+  const [memorizedSurahs, setMemorizedSurahs] = useState<number[]>([]);
 
   // Load data from localStorage on mount
   useEffect(() => {
     const savedProgress = localStorage.getItem(STORAGE_KEY);
     const savedStreak = localStorage.getItem(STREAK_KEY);
     const savedDailyGoal = localStorage.getItem(DAILY_GOAL_KEY);
+    const savedMemorizedSurahs = localStorage.getItem(MEMORIZED_SURAHS_KEY);
 
     if (savedProgress) {
       const parsed = JSON.parse(savedProgress);
@@ -47,6 +51,10 @@ export function useMemorizationProgress() {
 
     if (savedStreak) {
       setStreak(parseInt(savedStreak));
+    }
+
+    if (savedMemorizedSurahs) {
+      setMemorizedSurahs(JSON.parse(savedMemorizedSurahs));
     }
 
     if (savedDailyGoal) {
@@ -79,6 +87,14 @@ export function useMemorizationProgress() {
     localStorage.setItem(DAILY_GOAL_KEY, JSON.stringify(newGoal));
   };
 
+  const markSurahAsMemorized = (surahId: number) => {
+    if (!memorizedSurahs.includes(surahId)) {
+      const updatedMemorizedSurahs = [...memorizedSurahs, surahId];
+      setMemorizedSurahs(updatedMemorizedSurahs);
+      localStorage.setItem(MEMORIZED_SURAHS_KEY, JSON.stringify(updatedMemorizedSurahs));
+    }
+  };
+
   const markVerseMemorized = (surahId: number, verseNumber: number) => {
     const existingIndex = progress.findIndex(
       p => p.surahId === surahId && p.verseNumber === verseNumber
@@ -91,6 +107,9 @@ export function useMemorizationProgress() {
         memorizedAt: new Date()
       }];
       saveProgress(newProgress);
+
+      // Mark the entire surah as memorized when completing the last verse
+      markSurahAsMemorized(surahId);
 
       // Update daily goal
       const today = new Date().toDateString();
@@ -119,7 +138,8 @@ export function useMemorizationProgress() {
     return {
       surahId,
       memorizedVerses: surahVerses.length,
-      lastAccessed
+      lastAccessed,
+      isMemorized: memorizedSurahs.includes(surahId)
     };
   };
 
@@ -134,6 +154,10 @@ export function useMemorizationProgress() {
       thisWeek,
       totalSurahs: new Set(progress.map(p => p.surahId)).size
     };
+  };
+
+  const isSurahMemorized = (surahId: number): boolean => {
+    return memorizedSurahs.includes(surahId);
   };
 
   const getStreak = () => streak;
@@ -151,6 +175,8 @@ export function useMemorizationProgress() {
     getTotalProgress,
     getStreak,
     getDailyGoal,
-    setDailyTarget
+    setDailyTarget,
+    isSurahMemorized,
+    markSurahAsMemorized
   };
 }

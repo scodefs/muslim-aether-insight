@@ -7,10 +7,12 @@ import { AyahWithTranslation } from '@/hooks/useQuranData';
 interface MemorizationCardProps {
   verse: AyahWithTranslation;
   verseNumber: number;
-  onMemorized: () => void;
+  onMemorized?: () => void;
+  isLastVerse?: boolean;
+  onCompleted?: () => void;
 }
 
-export function MemorizationCard({ verse, verseNumber, onMemorized }: MemorizationCardProps) {
+export function MemorizationCard({ verse, verseNumber, onMemorized, isLastVerse, onCompleted }: MemorizationCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const handleFlip = () => {
@@ -35,8 +37,9 @@ export function MemorizationCard({ verse, verseNumber, onMemorized }: Memorizati
             
             <div className="flex-1 flex items-center justify-center">
               <p 
-                className="text-2xl md:text-3xl font-arabic leading-relaxed text-foreground"
+                className="text-2xl md:text-3xl font-arabic leading-loose text-foreground px-4"
                 dir="rtl"
+                style={{ lineHeight: '2.5' }}
               >
                 {verse.text_ar}
               </p>
@@ -51,13 +54,15 @@ export function MemorizationCard({ verse, verseNumber, onMemorized }: Memorizati
                 <RotateCcw className="h-4 w-4" />
                 Show Translation
               </Button>
-              <Button
-                onClick={onMemorized}
-                className="flex items-center gap-2 bg-primary hover:bg-primary/90"
-              >
-                <Check className="h-4 w-4" />
-                I've Memorized This
-              </Button>
+              {isLastVerse && onCompleted && (
+                <Button
+                  onClick={onCompleted}
+                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <Check className="h-4 w-4" />
+                  Completed
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -86,13 +91,15 @@ export function MemorizationCard({ verse, verseNumber, onMemorized }: Memorizati
                 <RotateCcw className="h-4 w-4" />
                 Show Arabic
               </Button>
-              <Button
-                onClick={onMemorized}
-                className="flex items-center gap-2 bg-primary hover:bg-primary/90"
-              >
-                <Check className="h-4 w-4" />
-                I've Memorized This
-              </Button>
+              {isLastVerse && onCompleted && (
+                <Button
+                  onClick={onCompleted}
+                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <Check className="h-4 w-4" />
+                  Completed
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>

@@ -31,7 +31,7 @@ export function MemorizationSession({ surahId, onBack }: MemorizationSessionProp
     }
   }, [ayahs]);
 
-  const handleVerseMemorized = () => {
+  const handleSurahCompleted = () => {
     if (currentVerse) {
       markVerseMemorized(surahId, currentVerse.ayah_number);
       setShowEncouragement(true);
@@ -118,7 +118,8 @@ export function MemorizationSession({ surahId, onBack }: MemorizationSessionProp
       <MemorizationCard 
         verse={currentVerse}
         verseNumber={currentVerseIndex + 1}
-        onMemorized={handleVerseMemorized}
+        isLastVerse={currentVerseIndex === verseOrder.length - 1}
+        onCompleted={handleSurahCompleted}
       />
 
       {/* Navigation */}
