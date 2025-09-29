@@ -45,10 +45,9 @@ export function ProgressTracker() {
       icon: Target,
       label: 'Daily Goal',
       value: `${dailyGoal.completed}/${dailyGoal.target}`,
-      color: isGoalMet 
-        ? 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400' 
-        : 'bg-secondary/10 text-secondary-foreground',
-      isClickable: true
+      color: 'bg-secondary/10 text-secondary-foreground',
+      isClickable: true,
+      isGoalMet: isGoalMet
     },
     {
       icon: Calendar,
@@ -62,7 +61,12 @@ export function ProgressTracker() {
     <>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {stats.map((stat, index) => (
-          <Card key={index} className="border-border/50 relative">
+          <Card 
+            key={index} 
+            className={`border-border/50 relative ${
+              stat.isGoalMet ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800' : ''
+            }`}
+          >
             <CardContent className="p-4 text-center">
               <div className={`w-10 h-10 rounded-lg ${stat.color} flex items-center justify-center mx-auto mb-2`}>
                 <stat.icon className="h-5 w-5" />
