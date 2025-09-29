@@ -16,8 +16,6 @@ const items = [
   { title: "AI Chat", url: "/", icon: MessageSquare },
   { title: "Daily Guidance", url: "/daily-guidance", icon: Heart },
   { title: "Quran", url: "/quran", icon: BookOpen },
-  { title: "Speakers", url: "/speakers", icon: Users },
-  { title: "Dashboard", url: "/dashboard", icon: BarChart3 },
 ];
 
 export function AppSidebar() {
