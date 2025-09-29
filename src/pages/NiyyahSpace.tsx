@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SurahGridSelector } from '@/components/niyyah/SurahGridSelector';
+import { SurahSelector } from '@/components/niyyah/SurahSelector';
 import { MemorizationSession } from '@/components/niyyah/MemorizationSession';
 import { ProgressTracker } from '@/components/niyyah/ProgressTracker';
 import { DailyGuidanceCards } from '@/components/niyyah/DailyGuidanceCards';
@@ -60,7 +60,7 @@ export default function NiyyahSpace() {
           <TabsContent value="memorize" className="space-y-8">
             <ProgressTracker showMemorizationStats={true} />
             {!selectedSurahId ? (
-              <SurahGridSelector 
+              <SurahSelector 
                 surahs={surahs}
                 loading={loading}
                 onSurahSelect={handleSurahSelect}
