@@ -62,57 +62,58 @@ export function ProgressTracker() {
     <>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {stats.map((stat, index) => (
-          <Card key={index} className="border-border/50">
+          <Card key={index} className="border-border/50 relative">
             <CardContent className="p-4 text-center">
-              <div className={`w-10 h-10 rounded-lg ${stat.color} flex items-center justify-center mx-auto mb-2 relative`}>
+              <div className={`w-10 h-10 rounded-lg ${stat.color} flex items-center justify-center mx-auto mb-2`}>
                 <stat.icon className="h-5 w-5" />
-                {stat.isClickable && (
-                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                    <DialogTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="absolute -top-1 -right-1 h-5 w-5 p-0 bg-primary/20 hover:bg-primary/30 rounded-full"
-                        onClick={() => setNewTarget(dailyGoal.target.toString())}
-                      >
-                        <Edit className="h-3 w-3" />
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-md">
-                      <DialogHeader>
-                        <DialogTitle>Set Daily Goal</DialogTitle>
-                      </DialogHeader>
-                      <div className="space-y-4 py-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="target">Daily Verse Target</Label>
-                          <Input
-                            id="target"
-                            type="number"
-                            min="1"
-                            max="50"
-                            value={newTarget}
-                            onChange={(e) => setNewTarget(e.target.value)}
-                            placeholder="Enter daily goal (1-50)"
-                          />
-                        </div>
-                        <div className="flex gap-2 justify-end">
-                          <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                            Cancel
-                          </Button>
-                          <Button 
-                            onClick={handleSaveTarget}
-                            disabled={!newTarget || parseInt(newTarget) < 1 || parseInt(newTarget) > 50}
-                          >
-                            Save Goal
-                          </Button>
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                )}
               </div>
               <p className="text-2xl font-bold text-foreground">{stat.value}</p>
               <p className="text-sm text-muted-foreground">{stat.label}</p>
+              
+              {stat.isClickable && (
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="absolute bottom-2 right-2 h-6 w-6 p-0 bg-primary/20 hover:bg-primary/30 rounded-full"
+                      onClick={() => setNewTarget(dailyGoal.target.toString())}
+                    >
+                      <Edit className="h-3 w-3" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Set Daily Goal</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="target">Daily Verse Target</Label>
+                        <Input
+                          id="target"
+                          type="number"
+                          min="1"
+                          max="50"
+                          value={newTarget}
+                          onChange={(e) => setNewTarget(e.target.value)}
+                          placeholder="Enter daily goal (1-50)"
+                        />
+                      </div>
+                      <div className="flex gap-2 justify-end">
+                        <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                          Cancel
+                        </Button>
+                        <Button 
+                          onClick={handleSaveTarget}
+                          disabled={!newTarget || parseInt(newTarget) < 1 || parseInt(newTarget) > 50}
+                        >
+                          Save Goal
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              )}
             </CardContent>
           </Card>
         ))}
