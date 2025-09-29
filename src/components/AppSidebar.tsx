@@ -16,7 +16,6 @@ const items = [
   { title: "AI Chat", url: "/", icon: MessageSquare },
   { title: "Niyyah Space", url: "/niyyah-space", icon: Heart },
   { title: "Quran", url: "/quran", icon: BookOpen },
-  { title: "Speakers", url: "/speakers", icon: Users },
 ];
 
 export function AppSidebar() {
