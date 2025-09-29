@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { format } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 
 interface DailyVerse {
   surah_name: string;
@@ -18,18 +20,25 @@ export function useDailyVerse() {
   useEffect(() => {
     async function fetchDailyVerse() {
       try {
-        // Get current minute for testing (format: YYYY-MM-DD-HH-mm)
-        const now = new Date();
-        const currentMinute = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}`;
+        // Get current date in EST timezone
+        const estTimeZone = 'America/New_York';
+        const nowInEST = toZonedTime(new Date(), estTimeZone);
         
-        // First, check if we have a verse for this minute, if not get a random one
+        // Calculate the "verse day" - if it's before 7 AM EST, use previous day
+        const sevenAM = new Date(nowInEST);
+        sevenAM.setHours(7, 0, 0, 0);
+        
+        const verseDate = nowInEST >= sevenAM ? nowInEST : new Date(nowInEST.getTime() - 24 * 60 * 60 * 1000);
+        const dailyKey = format(verseDate, 'yyyy-MM-dd');
+        
+        // First, check if we have a verse for this day, if not get a random one
         let { data: dailyVerseData, error: dailyVerseError } = await supabase
           .from('daily_verse')
           .select('ayah_id')
-          .eq('time_key', currentMinute)
+          .eq('time_key', dailyKey)
           .maybeSingle();
 
-        // If no verse exists for this minute, create one with a random verse
+        // If no verse exists for this day, create one with a random verse
         if (!dailyVerseData) {
           // Get a random verse using the database function
           const { data: randomVerseId, error: randomError } = await supabase
@@ -39,10 +48,10 @@ export function useDailyVerse() {
             throw randomError;
           }
 
-          // Insert the new verse for this minute
+          // Insert the new verse for this day
           const { data: insertData, error: insertError } = await supabase
             .from('daily_verse')
-            .insert([{ time_key: currentMinute, ayah_id: randomVerseId }])
+            .insert([{ time_key: dailyKey, ayah_id: randomVerseId }])
             .select('ayah_id')
             .single();
 
@@ -99,10 +108,10 @@ export function useDailyVerse() {
 
     fetchDailyVerse();
 
-    // Set up interval to refresh every minute for testing
+    // Set up interval to check for new day every hour
     const interval = setInterval(() => {
       fetchDailyVerse();
-    }, 60000); // 60 seconds
+    }, 60 * 60 * 1000); // 1 hour
 
     return () => clearInterval(interval);
   }, []);
