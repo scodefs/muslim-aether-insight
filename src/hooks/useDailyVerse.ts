@@ -18,18 +18,39 @@ export function useDailyVerse() {
   useEffect(() => {
     async function fetchDailyVerse() {
       try {
-        // Get today's date
-        const today = new Date().toISOString().split('T')[0];
+        // Get current minute for testing (format: YYYY-MM-DD-HH-mm)
+        const now = new Date();
+        const currentMinute = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}`;
         
-        // First, get the daily verse entry
-        const { data: dailyVerseData, error: dailyVerseError } = await supabase
+        // First, check if we have a verse for this minute, if not get a random one
+        let { data: dailyVerseData, error: dailyVerseError } = await supabase
           .from('daily_verse')
           .select('ayah_id')
-          .eq('date', today)
-          .single();
+          .eq('date', currentMinute)
+          .maybeSingle();
 
-        if (dailyVerseError) {
-          throw dailyVerseError;
+        // If no verse exists for this minute, create one with a random verse
+        if (!dailyVerseData) {
+          // Get a random verse using the database function
+          const { data: randomVerseId, error: randomError } = await supabase
+            .rpc('get_random_verse');
+
+          if (randomError) {
+            throw randomError;
+          }
+
+          // Insert the new verse for this minute
+          const { data: insertData, error: insertError } = await supabase
+            .from('daily_verse')
+            .insert([{ date: currentMinute, ayah_id: randomVerseId }])
+            .select('ayah_id')
+            .single();
+
+          if (insertError) {
+            throw insertError;
+          }
+
+          dailyVerseData = insertData;
         }
 
         // Get the ayah with surah info and translation
@@ -77,6 +98,13 @@ export function useDailyVerse() {
     }
 
     fetchDailyVerse();
+
+    // Set up interval to refresh every minute for testing
+    const interval = setInterval(() => {
+      fetchDailyVerse();
+    }, 60000); // 60 seconds
+
+    return () => clearInterval(interval);
   }, []);
 
   return { verse, loading, error };
