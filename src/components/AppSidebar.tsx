@@ -30,7 +30,7 @@ export function AppSidebar() {
     isActive ? "bg-sidebar-accent text-sidebar-primary" : "hover:bg-sidebar-accent/50";
 
   return (
-    <Sidebar collapsible="icon">{/* Removed fixed width classes to allow free resizing */}
+    <Sidebar side="left" collapsible="icon">{/* Enable left-side resizing */}
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className={isCollapsed ? "sr-only" : ""}>
