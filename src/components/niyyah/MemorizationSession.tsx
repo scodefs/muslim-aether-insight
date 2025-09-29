@@ -75,37 +75,37 @@ export function MemorizationSession({ surahId, onBack }: MemorizationSessionProp
   const progress = getProgress(surahId);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6 px-4 sm:px-0">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <Button variant="outline" onClick={onBack} className="flex items-center gap-2">
-          <ArrowLeft className="h-4 w-4" />
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <Button variant="outline" onClick={onBack} className="flex items-center gap-2 text-xs sm:text-sm px-3 sm:px-4 py-2">
+          <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4" />
           Back to Surahs
         </Button>
         
-        <div className="text-center">
-          <h2 className="text-xl font-semibold">{currentSurah.name_en}</h2>
-          <p className="text-lg font-arabic" dir="rtl">{currentSurah.name_ar}</p>
+        <div className="text-center order-first sm:order-none">
+          <h2 className="text-lg sm:text-xl font-semibold">{currentSurah.name_en}</h2>
+          <p className="text-base sm:text-lg font-arabic" dir="rtl">{currentSurah.name_ar}</p>
         </div>
 
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={shuffleVerses}>
-            <Shuffle className="h-4 w-4" />
+        <div className="flex gap-2 self-end sm:self-auto">
+          <Button variant="outline" size="sm" onClick={shuffleVerses} className="px-2 sm:px-3">
+            <Shuffle className="h-3 w-3 sm:h-4 sm:w-4" />
           </Button>
-          <Button variant="outline" size="sm" onClick={resetOrder}>
-            <RotateCcw className="h-4 w-4" />
+          <Button variant="outline" size="sm" onClick={resetOrder} className="px-2 sm:px-3">
+            <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4" />
           </Button>
         </div>
       </div>
 
       {/* Progress */}
       <div className="text-center space-y-2">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Verse {currentVerseIndex + 1} of {ayahs.length}
         </p>
-        <div className="w-full bg-muted rounded-full h-2">
+        <div className="w-full bg-muted rounded-full h-1.5 sm:h-2">
           <div 
-            className="bg-primary h-2 rounded-full transition-all duration-300"
+            className="bg-primary h-1.5 sm:h-2 rounded-full transition-all duration-300"
             style={{ width: `${((currentVerseIndex + 1) / ayahs.length) * 100}%` }}
           />
         </div>
