@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Copy, Play, Pause } from "lucide-react";
+import { Copy, Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { useSurahWithAyahs, useSurahs, AyahWithTranslation } from "@/hooks/useQuranData";
 import { BottomAudioPlayer, AudioPlayerRef } from "./BottomAudioPlayer";
@@ -19,8 +19,11 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number | null>(null);
   const [showBottomPlayer, setShowBottomPlayer] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const audioControlRef = useRef<AudioPlayerRef | null>(null);
   const verseRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  
+  const versesPerPage = 10;
   
   const surah = surahId ? surahs.find(s => s.id === surahId) : null;
 
@@ -73,9 +76,26 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
     );
   }
 
-  const versesToDisplay = selectedVerse 
+  const baseVersesToDisplay = selectedVerse 
     ? ayahs.filter(ayah => ayah.ayah_number === selectedVerse)
     : ayahs;
+    
+  const totalPages = Math.ceil(baseVersesToDisplay.length / versesPerPage);
+  const startIndex = (currentPage - 1) * versesPerPage;
+  const endIndex = startIndex + versesPerPage;
+  const versesToDisplay = baseVersesToDisplay.slice(startIndex, endIndex);
+  
+  const handlePreviousPage = () => {
+    setCurrentPage(prev => Math.max(1, prev - 1));
+    setCurrentPlayingIndex(null);
+    setShowBottomPlayer(false);
+  };
+  
+  const handleNextPage = () => {
+    setCurrentPage(prev => Math.min(totalPages, prev + 1));
+    setCurrentPlayingIndex(null);
+    setShowBottomPlayer(false);
+  };
 
   const handlePlayVerse = (index: number) => {
     if (currentPlayingIndex === index) {
@@ -156,6 +176,11 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
                 Verse {selectedVerse}
               </p>
             )}
+            {!selectedVerse && baseVersesToDisplay.length > versesPerPage && (
+              <p className="text-sm text-muted-foreground">
+                Page {currentPage} of {totalPages} ({baseVersesToDisplay.length} total verses)
+              </p>
+            )}
           </div>
 
           {/* Verses Container */}
@@ -177,6 +202,35 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
               </div>
             ))}
           </div>
+
+          {/* Pagination Controls */}
+          {!selectedVerse && totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-8">
+              <Button
+                variant="outline"
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className="flex items-center gap-2"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+              
+              <span className="text-sm text-muted-foreground px-4">
+                {currentPage} of {totalPages}
+              </span>
+              
+              <Button
+                variant="outline"
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-2"
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </div>
       </ScrollArea>
 
