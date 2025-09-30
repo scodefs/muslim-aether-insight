@@ -88,9 +88,6 @@ All colors MUST be HSL.
     @apply bg-background text-foreground font-sans;
   }
 
-  html {
-    @apply dark;
-  }
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
