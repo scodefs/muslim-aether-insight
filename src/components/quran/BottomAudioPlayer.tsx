@@ -159,7 +159,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                 variant="ghost"
                 size="icon"
                 onClick={onClose}
-                className="h-6 w-6 opacity-40 hover:opacity-100 transition-all duration-200"
+                className="h-6 w-6 opacity-40 hover:opacity-100 hover:scale-105 transition-all duration-200"
               >
                 <X className="h-3 w-3" />
               </Button>
@@ -171,7 +171,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                 variant="ghost"
                 size="icon"
                 onClick={onPrevious}
-                className="h-8 w-8 transition-transform"
+                className="h-8 w-8 hover:scale-105 transition-transform"
               >
                 <SkipBack className="h-4 w-4" />
               </Button>
@@ -180,7 +180,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                 variant="default"
                 size="icon"
                 onClick={togglePlayPause}
-                className="h-10 w-10 transition-transform"
+                className="h-10 w-10 hover:scale-105 transition-transform"
               >
                 {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
               </Button>
@@ -189,7 +189,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                 variant="ghost"
                 size="icon"
                 onClick={onNext}
-                className="h-8 w-8 transition-transform"
+                className="h-8 w-8 hover:scale-105 transition-transform"
               >
                 <SkipForward className="h-4 w-4" />
               </Button>
@@ -205,7 +205,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                   }
                   onRepeat();
                 }}
-                className="h-8 w-8 transition-transform"
+                className="h-8 w-8 hover:scale-105 transition-transform"
               >
                 <RotateCcw className="h-4 w-4" />
               </Button>
@@ -215,7 +215,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowVolumeSlider(!showVolumeSlider)}
-                  className="h-8 w-8 transition-transform"
+                  className="h-8 w-8 hover:scale-105 transition-transform"
                 >
                   <Volume2 className="h-4 w-4" />
                 </Button>
@@ -265,7 +265,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                 variant="ghost"
                 size="icon"
                 onClick={onPrevious}
-                className="h-6 w-6 transition-transform"
+                className="h-6 w-6 hover:scale-105 transition-transform"
               >
                 <SkipBack className="h-3 w-3" />
               </Button>
@@ -274,7 +274,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                 variant="default"
                 size="icon"
                 onClick={togglePlayPause}
-                className="h-7 w-7 transition-transform"
+                className="h-7 w-7 hover:scale-105 transition-transform"
               >
                 {isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
               </Button>
@@ -283,7 +283,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                 variant="ghost"
                 size="icon"
                 onClick={onNext}
-                className="h-6 w-6 transition-transform"
+                className="h-6 w-6 hover:scale-105 transition-transform"
               >
                 <SkipForward className="h-3 w-3" />
               </Button>
@@ -299,7 +299,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                   }
                   onRepeat();
                 }}
-                className="h-6 w-6 transition-transform"
+                className="h-6 w-6 hover:scale-105 transition-transform"
               >
                 <RotateCcw className="h-3 w-3" />
               </Button>
@@ -324,7 +324,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
                 variant="ghost"
                 size="icon"
                 onClick={toggleMute}
-                className="h-6 w-6 transition-transform"
+                className="h-6 w-6 hover:scale-105 transition-transform"
               >
                 <Volume2 className="h-3 w-3" />
               </Button>
@@ -344,7 +344,7 @@ export const BottomAudioPlayer = forwardRef<AudioPlayerRef, BottomAudioPlayerPro
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="h-6 w-6 opacity-40 hover:opacity-100 transition-all duration-200 ml-2"
+              className="h-6 w-6 opacity-40 hover:opacity-100 hover:scale-105 transition-all duration-200 ml-2"
             >
               <X className="h-3 w-3" />
             </Button>

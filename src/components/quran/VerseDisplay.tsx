@@ -266,7 +266,7 @@ interface VerseCardProps {
 
 function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, isAudioPlaying, onPlay }: VerseCardProps) {
   return (
-    <Card className="transition-colors animate-fade-in relative overflow-hidden border-accent/20">
+    <Card className="hover:shadow-md transition-shadow animate-fade-in relative overflow-hidden">
       <CardContent className="p-4 sm:p-6">
         <div className="flex items-start gap-3 sm:gap-4">
           {/* Verse Number Badge */}

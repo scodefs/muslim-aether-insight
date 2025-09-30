@@ -18,7 +18,7 @@ export function SpeakerCard({ speaker }: SpeakerCardProps) {
   };
 
   return (
-    <Card className="group transition-all duration-300 cursor-pointer animate-scale-in overflow-hidden border-accent/20">
+    <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer animate-scale-in overflow-hidden">
       <CardHeader className="pb-4">
         <div className="flex flex-col items-center space-y-4">
           <Avatar className="h-20 w-20 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
@@ -63,7 +63,7 @@ export function SpeakerCard({ speaker }: SpeakerCardProps) {
         
         <Button 
           onClick={handleSpeakerClick}
-          className="w-full transition-all"
+          className="w-full group-hover:shadow-md transition-all"
           size="sm"
         >
           View Speaker Page
