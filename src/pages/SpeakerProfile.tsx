@@ -29,7 +29,8 @@ export default function SpeakerProfile() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-8 max-w-7xl">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 p-6">
+      <div className="max-w-7xl mx-auto space-y-8">
       {/* Back Button */}
       <Button
         variant="ghost"
@@ -51,7 +52,7 @@ export default function SpeakerProfile() {
         
         <div className="flex-1 space-y-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">{speaker.name}</h1>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">{speaker.name}</h1>
             <p className="text-muted-foreground text-lg leading-relaxed">
               {speaker.bio}
             </p>
@@ -126,6 +127,7 @@ export default function SpeakerProfile() {
           </div>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 }

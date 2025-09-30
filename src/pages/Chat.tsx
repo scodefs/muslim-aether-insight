@@ -109,13 +109,13 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-gradient-to-br from-primary/5 via-background to-accent/5">
       <div className="flex-1 overflow-hidden">
         <ScrollArea ref={scrollAreaRef} className="h-full px-4 pt-6">
           <div className="max-w-4xl mx-auto">
             {messages.length === 0 && !isTyping ? (
               <div className="flex flex-col items-center justify-center h-full min-h-[60vh] text-center">
-                <h1 className="text-4xl font-medium text-foreground mb-8">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-8">
                   Where should we begin?
                 </h1>
               </div>

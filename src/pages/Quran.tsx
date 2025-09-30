@@ -22,14 +22,14 @@ export default function Quran() {
   const currentSurah = selectedSurahId ? surahs.find(s => s.id === selectedSurahId) : null;
 
   return (
-    <div className="flex-1 flex flex-col h-full">
+    <div className="flex-1 flex flex-col h-full bg-gradient-to-br from-primary/5 via-background to-accent/5">
       {/* Header Section - Mobile First */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-7xl mx-auto">
           {/* Title and Data Loaders */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="space-y-1 sm:space-y-2">
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Quran</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Quran</h1>
               <p className="text-sm sm:text-base text-muted-foreground">
                 Read and reflect upon the holy Quran
               </p>

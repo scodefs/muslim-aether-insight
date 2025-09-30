@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { BookOpen, Heart, Star, User, Copy, Loader2 } from "lucide-react";
+import { BookOpen, Heart, Star, User, Copy } from "lucide-react";
 import { useDailyVerse } from "@/hooks/useDailyVerse";
 
 const dailyContent = {
@@ -49,13 +50,10 @@ export function DailyGuidanceCards() {
             <div className="p-2 bg-primary/10 rounded-lg">
               <BookOpen className="h-5 w-5 text-primary" />
             </div>
-            <div>
+            <div className="flex-1">
               <CardTitle className="text-lg">Verse of the Day</CardTitle>
               {verseLoading ? (
-                <div className="flex items-center gap-2">
-                  <Loader2 className="h-3 w-3 animate-spin" />
-                  <span className="text-sm text-muted-foreground">Loading...</span>
-                </div>
+                <Skeleton className="h-4 w-32 mt-1" />
               ) : verseError ? (
                 <p className="text-sm text-destructive">Failed to load verse</p>
               ) : (
@@ -65,8 +63,13 @@ export function DailyGuidanceCards() {
           </CardHeader>
           <CardContent className="space-y-4">
             {verseLoading ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <div className="space-y-3">
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-6 w-3/4 ml-auto" />
+                <Skeleton className="h-4 w-full mt-4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
               </div>
             ) : verseError ? (
               <div className="text-center py-8">

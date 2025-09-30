@@ -49,13 +49,14 @@ const chartConfig = {
 
 export default function Dashboard() {
   return (
-    <div className="flex-1 space-y-6 p-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Overview of Islamic content and transcription statistics
-        </p>
-      </div>
+    <div className="flex-1 bg-gradient-to-br from-primary/5 via-background to-accent/5 p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Overview of Islamic content and transcription statistics
+          </p>
+        </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-4">
@@ -178,6 +179,7 @@ export default function Dashboard() {
             </ChartContainer>
           </CardContent>
         </Card>
+      </div>
       </div>
     </div>
   );

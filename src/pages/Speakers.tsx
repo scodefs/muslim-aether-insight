@@ -13,15 +13,16 @@ export default function Speakers() {
   );
 
   return (
-    <div className="container mx-auto p-6 space-y-8 max-w-7xl">
-      {/* Header */}
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Islamic Speakers</h1>
-          <p className="text-muted-foreground text-lg">
-            Discover wisdom from renowned Islamic scholars and speakers
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 p-6">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Islamic Speakers</h1>
+            <p className="text-muted-foreground text-lg">
+              Discover wisdom from renowned Islamic scholars and speakers
+            </p>
+          </div>
 
         {/* Search Bar */}
         <div className="relative max-w-md">
@@ -52,6 +53,7 @@ export default function Speakers() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
