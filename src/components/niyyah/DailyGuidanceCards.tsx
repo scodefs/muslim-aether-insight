@@ -45,7 +45,7 @@ export function DailyGuidanceCards() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Verse of the Day */}
-        <Card className="hover:shadow-lg transition-shadow animate-fade-in relative">
+        <Card className="transition-colors animate-fade-in relative border-accent/20">
           <CardHeader className="flex flex-row items-center gap-3">
             <div className="p-2 bg-primary/10 rounded-lg">
               <BookOpen className="h-5 w-5 text-primary" />
@@ -99,7 +99,7 @@ export function DailyGuidanceCards() {
         </Card>
 
         {/* Hadith of the Day */}
-        <Card className="hover:shadow-lg transition-shadow animate-fade-in relative">
+        <Card className="transition-colors animate-fade-in relative border-accent/20">
           <CardHeader className="flex flex-row items-center gap-3">
             <div className="p-2 bg-accent/10 rounded-lg">
               <Star className="h-5 w-5 text-accent" />
@@ -130,7 +130,7 @@ export function DailyGuidanceCards() {
         </Card>
 
         {/* Dua of the Day */}
-        <Card className="hover:shadow-lg transition-shadow animate-fade-in relative">
+        <Card className="transition-colors animate-fade-in relative border-accent/20">
           <CardHeader className="flex flex-row items-center gap-3">
             <div className="p-2 bg-chart-2/10 rounded-lg">
               <Heart className="h-5 w-5 text-chart-2" />
@@ -161,7 +161,7 @@ export function DailyGuidanceCards() {
         </Card>
 
         {/* Prophetic Character of the Day */}
-        <Card className="hover:shadow-lg transition-shadow animate-fade-in">
+        <Card className="transition-colors animate-fade-in border-accent/20">
           <CardHeader className="flex flex-row items-center gap-3">
             <div className="p-2 bg-chart-3/10 rounded-lg">
               <User className="h-5 w-5 text-chart-3" />

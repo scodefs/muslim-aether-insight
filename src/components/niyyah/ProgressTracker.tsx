@@ -33,7 +33,7 @@ export function ProgressTracker({ showMemorizationStats = true }: { showMemoriza
       icon: BookOpen,
       label: 'Total Verses',
       value: totalProgress.totalVerses,
-      color: 'bg-primary/10 text-primary',
+      color: 'bg-accent/10 text-accent',
       isMemorizationStat: true
     },
     {
@@ -47,7 +47,7 @@ export function ProgressTracker({ showMemorizationStats = true }: { showMemoriza
       icon: Target,
       label: 'Daily Goal',
       value: `${dailyGoal.completed}/${dailyGoal.target}`,
-      color: 'bg-secondary/10 text-secondary-foreground',
+      color: 'bg-accent/10 text-accent',
       isClickable: true,
       isGoalMet: isGoalMet,
       isMemorizationStat: true
@@ -56,7 +56,7 @@ export function ProgressTracker({ showMemorizationStats = true }: { showMemoriza
       icon: Calendar,
       label: 'This Week',
       value: totalProgress.thisWeek,
-      color: 'bg-muted text-muted-foreground',
+      color: 'bg-accent/10 text-accent',
       isMemorizationStat: true
     }
   ];
@@ -69,7 +69,7 @@ export function ProgressTracker({ showMemorizationStats = true }: { showMemoriza
         {stats.map((stat, index) => (
           <Card 
             key={index} 
-            className={`border-border/50 relative ${
+            className={`border-accent/20 relative ${
               stat.isGoalMet ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800' : ''
             }`}
           >
@@ -86,10 +86,10 @@ export function ProgressTracker({ showMemorizationStats = true }: { showMemoriza
                     <Button 
                       variant="ghost" 
                       size="sm"
-                      className="absolute bottom-2 right-2 h-6 w-6 p-0 bg-primary/20 hover:bg-primary/30 rounded-full"
+                      className="absolute bottom-2 right-2 h-6 w-6 p-0 bg-accent/20 hover:bg-accent/30 rounded-full"
                       onClick={() => setNewTarget(dailyGoal.target.toString())}
                     >
-                      <Edit className="h-3 w-3" />
+                      <Edit className="h-3 w-3 text-accent" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md">

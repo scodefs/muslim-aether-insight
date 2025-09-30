@@ -96,13 +96,13 @@ export default function SpeakerProfile() {
         <TabsContent value="playlists" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {speaker.playlists.map((playlist) => (
-              <Card key={playlist.id} className="group hover:shadow-lg transition-all duration-300 animate-scale-in">
+              <Card key={playlist.id} className="group transition-all duration-300 animate-scale-in border-accent/20">
                 <CardHeader className="pb-3">
                   <div className="aspect-video bg-muted rounded-lg overflow-hidden">
                     <img
                       src={playlist.thumbnail}
                       alt={playlist.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      className="w-full h-full object-cover transition-transform"
                     />
                   </div>
                 </CardHeader>

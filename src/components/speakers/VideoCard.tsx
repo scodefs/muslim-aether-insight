@@ -17,7 +17,7 @@ export function VideoCard({ video }: VideoCardProps) {
 
   return (
     <>
-      <Card className="group hover:shadow-lg transition-all duration-300 overflow-hidden animate-scale-in">
+      <Card className="group transition-all duration-300 overflow-hidden animate-scale-in border-accent/20">
         <CardHeader className="pb-3">
           <div className="aspect-video bg-muted rounded-lg overflow-hidden relative group">
             <iframe

@@ -56,7 +56,7 @@ export function SurahGridSelector({ surahs, loading, onSurahSelect }: SurahGridS
           return (
             <Card 
               key={surah.id} 
-              className={`group hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer border-border/50 hover:border-primary/30 ${
+              className={`group transition-all duration-300 cursor-pointer border-accent/20 ${
                 isMemorized ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800' : ''
               }`}
               onClick={() => onSurahSelect(surah.id)}
