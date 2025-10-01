@@ -33,21 +33,21 @@ export function ProgressTracker({ showMemorizationStats = true }: { showMemoriza
       icon: BookOpen,
       label: 'Total Verses',
       value: totalProgress.totalVerses,
-      color: 'bg-primary/10 text-primary',
+      color: 'bg-muted text-muted-foreground',
       isMemorizationStat: true
     },
     {
       icon: Trophy,
       label: 'Current Streak',
       value: `${currentStreak} days`,
-      color: 'bg-accent/10 text-accent',
+      color: 'bg-muted text-muted-foreground',
       isMemorizationStat: true
     },
     {
       icon: Target,
       label: 'Daily Goal',
       value: `${dailyGoal.completed}/${dailyGoal.target}`,
-      color: 'bg-secondary/10 text-secondary-foreground',
+      color: 'bg-muted text-muted-foreground',
       isClickable: true,
       isGoalMet: isGoalMet,
       isMemorizationStat: true
