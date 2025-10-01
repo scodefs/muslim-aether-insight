@@ -278,7 +278,7 @@ function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, isAudioPlay
           <div className="flex-1 space-y-3 min-w-0">
             {/* Arabic Text - Mobile Optimized */}
             <p 
-              className="leading-relaxed text-right text-lg sm:text-xl lg:text-2xl font-medium break-words"
+              className="font-arabic text-right break-words"
               dir="rtl"
             >
               {ayah.text_ar}
