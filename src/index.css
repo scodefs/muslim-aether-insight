@@ -108,11 +108,12 @@ All colors MUST be HSL.
 
   /* Arabic font styling */
   .font-arabic {
-    font-family: 'Scheherazade New', 'Amiri Quran', 'Traditional Arabic', 'Arial Unicode MS', serif;
+    font-family: 'Amiri Quran', 'Noto Naskh Arabic', 'Traditional Arabic', serif;
     line-height: 2.2;
     font-size: 1.5rem;
     font-weight: 400;
     letter-spacing: 0.02em;
+    font-feature-settings: 'liga' 1, 'calt' 1;
   }
   
   @media (min-width: 640px) {
