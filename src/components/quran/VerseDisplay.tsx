@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { useSurahWithAyahs, useSurahs, AyahWithTranslation } from "@/hooks/useQuranData";
+import { useQuranWords } from "@/hooks/useQuranWords";
 import { BottomAudioPlayer, AudioPlayerRef } from "./BottomAudioPlayer";
 import { useState, useRef, useEffect } from "react";
 
@@ -198,6 +199,7 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
                 <VerseCard
                   ayah={ayah}
                   surah={surah}
+                  surahId={surahId}
                   onCopy={copyToClipboard}
                   index={index}
                   isCurrentlyPlaying={currentPlayingIndex === index}
@@ -257,6 +259,7 @@ export function VerseDisplay({ surahId, selectedVerse, translatorName = "Hilali 
 interface VerseCardProps {
   ayah: AyahWithTranslation;
   surah: { id: number; name_en: string; name_ar: string };
+  surahId: number | null;
   onCopy: (text: string) => void;
   index: number;
   isCurrentlyPlaying: boolean;
@@ -264,7 +267,8 @@ interface VerseCardProps {
   onPlay: () => void;
 }
 
-function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, isAudioPlaying, onPlay }: VerseCardProps) {
+function VerseCard({ ayah, surah, surahId, onCopy, index, isCurrentlyPlaying, isAudioPlaying, onPlay }: VerseCardProps) {
+  const { data: words, isLoading: wordsLoading } = useQuranWords(surahId, ayah.ayah_number);
   return (
     <Card className="transition-shadow animate-fade-in relative overflow-hidden">
       <CardContent className="p-4 sm:p-6">
@@ -276,13 +280,35 @@ function VerseCard({ ayah, surah, onCopy, index, isCurrentlyPlaying, isAudioPlay
           
           {/* Verse Content */}
           <div className="flex-1 space-y-3 min-w-0">
-            {/* Arabic Text - Mobile Optimized */}
-            <p 
-              className="font-arabic text-right break-words"
-              dir="rtl"
-            >
-              {ayah.text_ar}
-            </p>
+            {/* Word-by-Word Display - QPC V4 Uthmanic Script */}
+            {words && words.length > 0 ? (
+              <div 
+                className="flex flex-wrap gap-2 sm:gap-3 justify-end items-center"
+                dir="rtl"
+              >
+                {words.map((word) => (
+                  <span
+                    key={word.id}
+                    className="font-quran text-2xl sm:text-3xl lg:text-4xl text-foreground hover:text-primary transition-colors cursor-pointer"
+                    title={`Word ${word.word_position}`}
+                  >
+                    {word.text_uthmani}
+                  </span>
+                ))}
+              </div>
+            ) : wordsLoading ? (
+              <div className="text-center py-2">
+                <span className="text-sm text-muted-foreground">Loading word-by-word...</span>
+              </div>
+            ) : (
+              /* Fallback to regular Arabic text if word data not available */
+              <p 
+                className="font-arabic text-right break-words"
+                dir="rtl"
+              >
+                {ayah.text_ar}
+              </p>
+            )}
             
             {/* Translation Section */}
             <div className="space-y-2">
