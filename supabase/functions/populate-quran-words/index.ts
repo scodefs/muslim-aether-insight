@@ -17,16 +17,39 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    console.log('Fetching QPC V4 word-by-word Quran data...')
+    console.log('Fetching Quran word-by-word data from API...')
     
-    // Fetch from GitHub raw content - QPC V4 format
-    const response = await fetch('https://raw.githubusercontent.com/cpfair/quran-data/master/qpc-v4.json')
+    const qpcData: Record<string, any> = {}
+    let wordIdCounter = 1
     
-    if (!response.ok) {
-      throw new Error(`Failed to fetch QPC data: ${response.statusText}`)
+    // Fetch word-by-word data for all 114 surahs
+    for (let surahId = 1; surahId <= 114; surahId++) {
+      console.log(`Fetching Surah ${surahId}/114...`)
+      
+      const response = await fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${surahId}`)
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch Surah ${surahId}: ${response.statusText}`)
+      }
+      
+      const data = await response.json()
+      
+      data.verses.forEach((verse: any) => {
+        const words = verse.text_uthmani.split(' ')
+        words.forEach((word: string, index: number) => {
+          const location = `${surahId}:${verse.verse_number}:${index + 1}`
+          qpcData[location] = {
+            id: wordIdCounter++,
+            surah: String(surahId),
+            ayah: String(verse.verse_number),
+            word: String(index + 1),
+            location: location,
+            text: word
+          }
+        })
+      })
     }
-
-    const qpcData = await response.json()
+    
     console.log(`Processing word-by-word data for ${Object.keys(qpcData).length} entries...`)
 
     // Process in batches to avoid memory issues
