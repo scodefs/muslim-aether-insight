@@ -283,14 +283,17 @@ function VerseCard({ ayah, surah, surahId, onCopy, index, isCurrentlyPlaying, is
             {/* Word-by-Word Display - QPC V4 Uthmanic Script */}
             {words && words.length > 0 ? (
               <div 
-                className="flex flex-wrap gap-2 sm:gap-3 justify-end items-center"
+                className="text-right leading-loose"
                 dir="rtl"
               >
-                {words.map((word) => (
+                {words.map((word, idx) => (
                   <span
                     key={word.id}
-                    className="font-quran text-2xl sm:text-3xl lg:text-4xl text-foreground hover:text-primary transition-colors cursor-pointer"
-                    title={`Word ${word.word_position}`}
+                    className="font-quran text-3xl sm:text-4xl lg:text-5xl inline-block mx-1"
+                    style={{
+                      fontFeatureSettings: '"liga" 1, "calt" 1',
+                      letterSpacing: 'normal',
+                    }}
                   >
                     {word.text_uthmani}
                   </span>
@@ -303,7 +306,7 @@ function VerseCard({ ayah, surah, surahId, onCopy, index, isCurrentlyPlaying, is
             ) : (
               /* Fallback to regular Arabic text if word data not available */
               <p 
-                className="font-arabic text-right break-words"
+                className="font-arabic text-right break-words text-2xl sm:text-3xl"
                 dir="rtl"
               >
                 {ayah.text_ar}

@@ -106,6 +106,18 @@ All colors MUST be HSL.
     @apply bg-muted-foreground/70;
   }
 
+  /* QPC Hafs V4 Uthmanic Font for Word-by-Word Display */
+  .font-quran {
+    font-family: 'Amiri Quran', 'KFGQPC Uthmanic Script HAFS', 'Traditional Arabic', serif;
+    line-height: 2.5;
+    font-weight: normal;
+    letter-spacing: 0;
+    font-feature-settings: 'liga' 1, 'calt' 1, 'dlig' 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   /* King Fahad Complex UTHMANI Font */
   @font-face {
     font-family: 'KFGQPC Uthmanic Script HAFS';
