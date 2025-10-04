@@ -88,6 +88,36 @@ export type Database = {
           },
         ]
       }
+      quran_words: {
+        Row: {
+          ayah_number: number
+          created_at: string | null
+          id: number
+          location: string
+          surah_id: number
+          text_uthmani: string
+          word_position: number
+        }
+        Insert: {
+          ayah_number: number
+          created_at?: string | null
+          id: number
+          location: string
+          surah_id: number
+          text_uthmani: string
+          word_position: number
+        }
+        Update: {
+          ayah_number?: number
+          created_at?: string | null
+          id?: number
+          location?: string
+          surah_id?: number
+          text_uthmani?: string
+          word_position?: number
+        }
+        Relationships: []
+      }
       reciters: {
         Row: {
           created_at: string | null
