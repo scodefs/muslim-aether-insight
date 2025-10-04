@@ -17,37 +17,23 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    console.log('Loading QPC V4 word-by-word Quran data from jsdelivr CDN...')
+    console.log('Loading QPC V4 word-by-word Quran data from your uploaded file...')
     
-    // Try multiple CDN sources for QPC V4 data
-    const cdnUrls = [
-      'https://cdn.jsdelivr.net/gh/cpfair/quran-data@master/qpc-v4.json',
-      'https://rawcdn.githack.com/cpfair/quran-data/master/qpc-v4.json'
-    ]
+    // Fetch the QPC V4 JSON data from the public folder of your deployed app
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
+    const projectRef = supabaseUrl.split('//')[1]?.split('.')[0]
     
-    let qpcData: any = null
-    let lastError: Error | null = null
+    // Use the Lovable preview URL to fetch the public JSON file
+    const qpcDataUrl = `https://mlghlhmcwwxdqujszaku.supabase.co/storage/v1/object/public/data/qpc-v4.json`
     
-    for (const url of cdnUrls) {
-      try {
-        console.log(`Trying to fetch from: ${url}`)
-        const response = await fetch(url)
-        
-        if (response.ok) {
-          qpcData = await response.json()
-          console.log(`Successfully fetched data from: ${url}`)
-          break
-        }
-      } catch (err) {
-        lastError = err as Error
-        console.log(`Failed to fetch from ${url}: ${err}`)
-      }
+    console.log(`Fetching from: ${qpcDataUrl}`)
+    const response = await fetch(qpcDataUrl)
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch QPC V4 data: ${response.statusText}`)
     }
-    
-    if (!qpcData) {
-      throw new Error(`Failed to fetch QPC V4 data from all sources. Last error: ${lastError?.message || 'Unknown'}`)
-    }
-    
+
+    const qpcData = await response.json()
     console.log(`Processing word-by-word data for ${Object.keys(qpcData).length} entries...`)
 
     // Process in batches to avoid memory issues
