@@ -19,12 +19,9 @@ serve(async (req) => {
 
     console.log('Loading QPC V4 word-by-word Quran data from your uploaded file...')
     
-    // Fetch the QPC V4 JSON data from the public folder of your deployed app
+    // Fetch the QPC V4 JSON data from Supabase storage bucket
     const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
-    const projectRef = supabaseUrl.split('//')[1]?.split('.')[0]
-    
-    // Use the Lovable preview URL to fetch the public JSON file
-    const qpcDataUrl = `https://mlghlhmcwwxdqujszaku.supabase.co/storage/v1/object/public/data/qpc-v4.json`
+    const qpcDataUrl = `${supabaseUrl}/storage/v1/object/public/quran-data/qpc-v4.json`
     
     console.log(`Fetching from: ${qpcDataUrl}`)
     const response = await fetch(qpcDataUrl)
