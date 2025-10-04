@@ -4,6 +4,7 @@ import { VerseSelector } from "@/components/quran/VerseSelector";
 import { VerseDisplay } from "@/components/quran/VerseDisplay";
 import { QuranDataLoader } from "@/components/quran/QuranDataLoader";
 import { AudioDataLoader } from "@/components/quran/AudioDataLoader";
+import { QuranWordsLoader } from "@/components/quran/QuranWordsLoader";
 import { TranslationSelector } from "@/components/quran/TranslationSelector";
 import { useSurahs } from "@/hooks/useQuranData";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,15 +39,19 @@ export default function Quran() {
             {/* Data Loaders - Hidden on mobile, visible on tablet+ */}
             <div className="hidden md:flex gap-2">
               <Tabs defaultValue="text" className="w-auto">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="text" className="text-xs">Text Data</TabsTrigger>
                   <TabsTrigger value="audio" className="text-xs">Audio Data</TabsTrigger>
+                  <TabsTrigger value="words" className="text-xs">Word Data</TabsTrigger>
                 </TabsList>
                 <TabsContent value="text" className="mt-2">
                   <QuranDataLoader />
                 </TabsContent>
                 <TabsContent value="audio" className="mt-2">
                   <AudioDataLoader />
+                </TabsContent>
+                <TabsContent value="words" className="mt-2">
+                  <QuranWordsLoader />
                 </TabsContent>
               </Tabs>
             </div>
@@ -90,15 +95,19 @@ export default function Quran() {
           {/* Mobile Data Loaders - Only visible on mobile */}
           <div className="md:hidden">
             <Tabs defaultValue="text" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="text" className="text-xs">Text Data</TabsTrigger>
                 <TabsTrigger value="audio" className="text-xs">Audio Data</TabsTrigger>
+                <TabsTrigger value="words" className="text-xs">Word Data</TabsTrigger>
               </TabsList>
               <TabsContent value="text" className="mt-3">
                 <QuranDataLoader />
               </TabsContent>
               <TabsContent value="audio" className="mt-3">
                 <AudioDataLoader />
+              </TabsContent>
+              <TabsContent value="words" className="mt-3">
+                <QuranWordsLoader />
               </TabsContent>
             </Tabs>
           </div>
