@@ -19,8 +19,8 @@ serve(async (req) => {
 
     console.log('Fetching QPC V4 word-by-word Quran data...')
     
-    // Fetch the QPC V4 JSON data
-    const response = await fetch('https://raw.githubusercontent.com/quran/quran.com-api/master/data/quran/verses/uthmani.json')
+    // Fetch from GitHub raw content - QPC V4 format
+    const response = await fetch('https://raw.githubusercontent.com/cpfair/quran-data/master/qpc-v4.json')
     
     if (!response.ok) {
       throw new Error(`Failed to fetch QPC data: ${response.statusText}`)
