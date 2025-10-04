@@ -106,14 +106,23 @@ All colors MUST be HSL.
     @apply bg-muted-foreground/70;
   }
 
+  /* King Fahad Complex UTHMANI Font */
+  @font-face {
+    font-family: 'KFGQPC Uthmanic Script HAFS';
+    src: url('https://cdn.jsdelivr.net/gh/thetruetruth/quran-data-kfgqpc@master/fonts/KFGQPC-Uthmanic-Script-HAFS-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
   /* Arabic font styling */
   .font-arabic {
-    font-family: 'Scheherazade New', serif;
+    font-family: 'KFGQPC Uthmanic Script HAFS', 'Traditional Arabic', serif;
     line-height: 2.2;
     font-size: 1.5rem;
     font-weight: 400;
     letter-spacing: 0.02em;
-    font-feature-settings: 'liga' 1, 'calt' 1;
+    font-feature-settings: 'liga' 1, 'calt' 1, 'dlig' 1;
   }
   
   @media (min-width: 640px) {
