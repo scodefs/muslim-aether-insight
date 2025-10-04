@@ -40,9 +40,9 @@ serve(async (req) => {
           const location = `${surahId}:${verse.verse_number}:${index + 1}`
           qpcData[location] = {
             id: wordIdCounter++,
-            surah: String(surahId),
-            ayah: String(verse.verse_number),
-            word: String(index + 1),
+            surah: surahId,
+            ayah: verse.verse_number,
+            word: index + 1,
             location: location,
             text: word
           }
